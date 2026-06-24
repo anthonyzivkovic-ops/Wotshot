@@ -1,0 +1,9 @@
+from pydantic import BaseModel
+
+class NewsPacket(BaseModel):
+    id: str
+    title: str
+    category: str       # e.g., "Sports"
+    subcategory: str    # e.g., "Soccer"
+    subject_tag: str    # e.g., "World Cup"
+    country_code: str   # e.g., "GLOBAL"
