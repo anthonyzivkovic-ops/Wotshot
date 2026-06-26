@@ -71,15 +71,65 @@ export default function App() {
           ))}
         </div>
 
-  
-                ))}
-              </ul>
-              <div className="pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs text-slate-400">
-                <span>Via {packet.source}</span>
-                <a href={packet.link} target="_blank" rel="noreferrer" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1">Source <ExternalLink size={12} /></a>
+        {/* Intelligence Packet Cards Stream */}
+        <div className="space-y-4">
+          {filtered.map((packet, idx) => (
+            <div key={packet.id || idx} className="bg-slate-900/50 border border-slate-900 rounded-xl p-5 space-y-4 hover:border-slate-800 transition-all">
+              
+              {/* Card Meta Header */}
+              <div className="flex items-center justify-between border-b border-slate-850 pb-3">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="bg-slate-800 px-2.5 py-1 rounded-md text-slate-300 font-semibold flex items-center gap-1.5">
+                    {CATEGORY_LOGOS[packet.category] || <Layers className="w-3 h-3" />}
+                    {packet.category}
+                  </span>
+                  {packet.subcategory && (
+                    <span className="text-amber-400 font-medium px-1">
+                      → {packet.subcategory}
+                    </span>
+                  )}
+                </div>
+                {packet.timestamp && (
+                  <span className="text-[11px] text-slate-500 bg-slate-950 px-2 py-0.5 rounded border border-slate-900">
+                    {packet.timestamp}
+                  </span>
+                )}
               </div>
+
+              {/* Title & Bullet Points */}
+              <div className="space-y-3">
+                <h3 className="text-lg font-bold text-slate-100 leading-snug">{packet.title}</h3>
+                {packet.summary_bullets && packet.summary_bullets.length > 0 && (
+                  <ul className="space-y-2.5 pl-1">
+                    {packet.summary_bullets.map((bullet, i) => (
+                      <li key={i} className="text-sm text-slate-300 flex items-start gap-2.5 leading-relaxed">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Card Footer Actions */}
+              <div className="pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs text-slate-400">
+                <span>Via <strong className="text-slate-300">{packet.source || "Unknown"}</strong></span>
+                {packet.link && (
+                  <a href={packet.link} target="_blank" rel="noreferrer" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium transition-colors">
+                    Source <ExternalLink size={12} />
+                  </a>
+                )}
+              </div>
+
             </div>
           ))}
+
+          {/* Empty State */}
+          {!loading && filtered.length === 0 && (
+            <div className="text-center py-12 border border-dashed border-slate-900 rounded-xl">
+              <p className="text-sm text-slate-500">No intelligence packets found in this category.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
