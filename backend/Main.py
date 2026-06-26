@@ -79,7 +79,7 @@ export default function App() {
                 <div className="flex items-center gap-1.5 text-slate-400 font-medium truncate">
                   {CATEGORY_LOGOS[packet.category]}
                   <span className="text-slate-200 font-bold">{packet.category}</span>
-                  <span className="text-slate-600">→</span>
+                  
                   <span className="text-indigo-400 font-semibold">{packet.subcategory}</span>
                   <span className="text-slate-600">→</span>
                   <span className="bg-slate-800 px-2 py-0.5 rounded text-slate-300 font-medium text-[11px]">{packet.subject_tag}</span>
