@@ -71,27 +71,7 @@ export default function App() {
           ))}
         </div>
 
-        {/* Timeline Feed */}
-        <div className="space-y-6">
-          {filtered.map(packet => (
-            <div key={packet.id} className={`bg-slate-900 rounded-xl p-5 border ${packet.is_trending ? 'border-amber-500/40 shadow-lg shadow-amber-500/5' : 'border-slate-900'}`}>
-              <div className="flex items-center justify-between border-b border-slate-800/40 pb-3 mb-4 text-xs">
-                <div className="flex items-center gap-1.5 text-slate-400 font-medium truncate">
-                  {CATEGORY_LOGOS[packet.category]}
-                  <span className="text-slate-200 font-bold">{packet.category}</span>
-                  
-                  <span className="text-indigo-400 font-semibold">{packet.subcategory}</span>
-                  <span className="text-slate-600">→</span>
-                  <span className="bg-slate-800 px-2 py-0.5 rounded text-slate-300 font-medium text-[11px]">{packet.subject_tag}</span>
-                </div>
-                <span className="bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold text-[10px]">{packet.country_code}</span>
-              </div>
-              <h3 className="text-lg font-bold text-slate-100 mb-4 leading-snug">{packet.title}</h3>
-              <ul className="space-y-3 pl-1 border-l-2 border-slate-800 mb-5">
-                {packet.summary_bullets.map((b, i) => (
-                  <li key={i} className="text-sm text-slate-300 flex items-start gap-2.5 leading-relaxed">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-2"></span> <span>{b}</span>
-                  </li>
+  
                 ))}
               </ul>
               <div className="pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs text-slate-400">
