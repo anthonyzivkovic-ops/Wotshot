@@ -1,4 +1,3 @@
-import '../index.css';
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Layers, Globe2, Scale, Briefcase, Cpu, Clapperboard, Trophy, HeartPulse, RefreshCw, ExternalLink, Flame, Sparkles } from 'lucide-react';
