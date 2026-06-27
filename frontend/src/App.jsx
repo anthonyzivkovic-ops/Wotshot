@@ -1,148 +1,239 @@
-import React, { useState, useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Layers, Globe2, Scale, Briefcase, Cpu, Clapperboard, Trophy, HeartPulse, RefreshCw, ExternalLink, Flame, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
 
-const CATEGORY_LOGOS = {
-  "All":           <Layers className="w-4 h-4" />,
-  "World":         <Globe2 className="w-4 h-4 text-sky-400" />,
-  "Politics":      <Scale className="w-4 h-4 text-purple-400" />,
-  "Business":      <Briefcase className="w-4 h-4 text-emerald-400" />,
-  "Technology":    <Cpu className="w-4 h-4 text-amber-400" />,
-  "Entertainment": <Clapperboard className="w-4 h-4 text-pink-400" />,
-  "Sports":        <Trophy className="w-4 h-4 text-yellow-400" />,
-  "Health":        <HeartPulse className="w-4 h-4 text-red-400" />
-};
+// Massive realistic intelligence feed
+const initialPackets = [
+  {
+    id: 1,
+    category: 'Technology',
+    subCategory: 'Artificial Intelligence',
+    time: 'Just Now',
+    title: 'Next-Gen LLMs Introduce Native Multimodal Processing',
+    points: [
+      'New architectures process live video feeds and speech natively without external transcription tools.',
+      'Token efficiency has improved by 40%, reducing operational inference costs significantly.',
+      'Context windows expand up to 2 million tokens across major cloud deployment endpoints.'
+    ],
+    source: 'TechCrunch',
+    sourceUrl: '#'
+  },
+  {
+    id: 2,
+    category: 'Business',
+    subCategory: 'Global Markets',
+    time: '14m ago',
+    title: 'Industrial Supply Chains Shift Toward Nearshoring Initiatives',
+    points: [
+      'Manufacturing firms increase capital allocation for regional logistics infrastructure.',
+      'Automation integration balances higher local labor costs in domestic facilities.',
+      'Just-in-time inventory models are being replaced by resilient strategic buffering.'
+    ],
+    source: 'Bloomberg',
+    sourceUrl: '#'
+  },
+  {
+    id: 3,
+    category: 'Business',
+    subCategory: 'Energy Sector',
+    time: '45m ago',
+    title: 'Green Hydrogen Infrastructure Gains Major Industrial Backing',
+    points: [
+      'New production facilities receive $1.2B in joint private-public infrastructure bonds.',
+      'Next-generation electrolyzers achieve a baseline 78% thermodynamic efficiency rating.',
+      'Heavy transport fleets outline multi-year adoption roadmaps starting late Q3.'
+    ],
+    source: 'Reuters',
+    sourceUrl: '#'
+  },
+  {
+    id: 4,
+    category: 'World',
+    subCategory: 'Trade Logistics',
+    time: '1h ago',
+    title: 'Global Maritime Routes Face Increased Congestion at Key Chokepoints',
+    points: [
+      'Alternative rail corridors see a 22% spike in volume as shipping lines seek bypasses.',
+      'Freight insurance premiums adjust upward reflecting prolonged transit timelines.',
+      'Port authority automation updates deployed to accelerate customs processing.'
+    ],
+    source: 'Financial Times',
+    sourceUrl: '#'
+  },
+  {
+    id: 5,
+    category: 'Politics',
+    subCategory: 'Regulation',
+    time: '2h ago',
+    title: 'Cross-Border Data Privacy Frameworks Enter Enforcement Phase',
+    points: [
+      'New compliance mandates impose strict operational localization on user analytics.',
+      'Enterprise cloud platforms deploy automated sovereign boundary guardrails.',
+      'Non-compliance penalties structured to scale directly with global gross revenue.'
+    ],
+    source: 'The Wall Street Journal',
+    sourceUrl: '#'
+  },
+  {
+    id: 6,
+    category: 'Technology',
+    subCategory: 'Hardware & Silicon',
+    time: '3h ago',
+    title: 'Sub-2nm Semiconductor Fab Facilities Begin Pilot Run Production',
+    points: [
+      'Advanced High-NA EUV lithography systems achieve stable operational uptime.',
+      'Thermal dissipation thresholds improved by 15% using composite diamond substrates.',
+      'Initial wafer yields meet baseline requirements for early enterprise validation.'
+    ],
+    source: 'EETimes',
+    sourceUrl: '#'
+  },
+  {
+    id: 7,
+    category: 'Entertainment',
+    subCategory: 'Digital Media',
+    time: '4h ago',
+    title: 'Streaming Ecosystems Shift Monetization Toward Hybrid Tiers',
+    points: [
+      'Premium ad-supported subscriptions surpass traditional pure-play models in growth.',
+      'Licensing agreements pivot back to non-exclusive syndication networks.',
+      'Interactive community-driven content formats see increased production funding.'
+    ],
+    source: 'Variety',
+    sourceUrl: '#'
+  },
+  {
+    id: 8,
+    category: 'Sports',
+    subCategory: 'Analytics',
+    time: '5h ago',
+    title: 'Biometric Tracking Integration Approved for Professional Leagues',
+    points: [
+      'Real-time physiological telemetry to be integrated directly into broadcast streams.',
+      'Collective bargaining agreements establish strict data ownership boundaries for athletes.',
+      'Predictive injury prevention algorithms adopted by top-tier medical staffs.'
+    ],
+    source: 'ESPN',
+    sourceUrl: '#'
+  }
+];
+
+const categories = ['All', 'World', 'Politics', 'Business', 'Technology', 'Entertainment', 'Sports'];
 
 export default function App() {
-  const [packets, setPackets] = useState([]);
-  const [trends, setTrends] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All');
-  const [loading, setLoading] = useState(true);
+  const [packets, setPackets] = useState(initialPackets);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const apiBase = import.meta.env.VITE_API_URL || 'https://wotshot-api.onrender.com';
-      const [resPackets, resTrends] = await Promise.all([
-        fetch(`${apiBase}/api/packets`),
-        fetch(`${apiBase}/api/trends`)
-      ]);
-      setPackets(await resPackets.json());
-      setTrends(await resTrends.json());
-    } catch (e) { console.error(e); }
-    setLoading(false);
+  // Filter packets by category
+  const filteredPackets = activeCategory === 'All'
+    ? packets
+    : packets.filter(p => p.category === activeCategory);
+
+  // Simulated dynamic refresh by shuffling data
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      const shuffled = [...packets].sort(() => Math.random() - 0.5);
+      setPackets(shuffled);
+      setIsRefreshing(false);
+    }, 600);
   };
 
-  useEffect(() => { fetchData(); }, []);
-
-  const filtered = activeCategory === 'All' ? packets : packets.filter(p => p.category === activeCategory);
-
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-amber-500 p-2 rounded-lg text-slate-950"><Flame size={22} className="fill-slate-950" /></div>
-          <div>
-            <h1 className="text-2xl font-black tracking-tighter text-white">WOT<span className="text-amber-500">SHOT</span></h1>
-            <p className="text-xs text-slate-400 tracking-wide font-medium uppercase">Instant Intelligence Packets</p>
+    <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-black">
+      {/* Header */}
+      <header className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur sticky top-0 z-50 px-4 py-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🔥</span>
+            <h1 className="text-xl font-black tracking-wider text-white">WOTSHOT</h1>
           </div>
+          <button 
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all disabled:opacity-50"
+          >
+            <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
+            {isRefreshing ? 'Updating...' : 'Refresh'}
+          </button>
         </div>
-        <button onClick={fetchData} disabled={loading} className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 transition-all text-sm px-4 py-2 rounded-lg border border-slate-800">
-          <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> {loading ? "Syncing..." : "Refresh"}
-        </button>
       </header>
 
-      {/* Spiking Ticker */}
-      <div className="bg-slate-950 border-b border-slate-900 px-6 py-3 overflow-x-auto flex items-center gap-4 whitespace-nowrap">
-        <div className="flex items-center gap-1.5 shrink-0 text-amber-500 font-bold uppercase text-xs border-r border-slate-900 pr-4"><Sparkles size={14} /> <span>Spiking:</span></div>
-        <div className="flex gap-3">
-          {trends.map((t, i) => (
-            <span key={i} className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-xs text-slate-300">#{i+1} {t}</span>
-          ))}
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Intro */}
+        <div>
+          <p className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">Instant Intelligence Packets</p>
         </div>
-      </div>
 
-      <main className="max-w-2xl mx-auto px-4 py-8">
-        {/* Navigation Categories */}
-        <div className="flex gap-2 overflow-x-auto pb-4 mb-6 border-b border-slate-900">
-          {Object.keys(CATEGORY_LOGOS).map(cat => (
-            <button key={cat} onClick={() => setActiveCategory(cat)} className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${activeCategory === cat ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-900 text-slate-400'}`}>
-              {CATEGORY_LOGOS[cat]} <span>{cat}</span>
+        {/* Category Pills */}
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4 mask-image">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border snap-start ${
+                activeCategory === cat
+                  ? 'bg-white text-black border-white'
+                  : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:border-neutral-700'
+              }`}
+            >
+              {cat}
             </button>
           ))}
         </div>
 
-        {/* Intelligence Packet Cards Stream */}
+        {/* Intelligence Feed */}
         <div className="space-y-4">
-          {filtered.map((packet, idx) => (
-            <div key={packet.id || idx} className="bg-slate-900/50 border border-slate-900 rounded-xl p-5 space-y-4 hover:border-slate-800 transition-all">
-              
-              {/* Card Meta Header */}
-              <div className="flex items-center justify-between border-b border-slate-850 pb-3">
-                <div className="flex items-center gap-2 text-xs">
-                  <span className="bg-slate-800 px-2.5 py-1 rounded-md text-slate-300 font-semibold flex items-center gap-1.5">
-                    {CATEGORY_LOGOS[packet.category] || <Layers className="w-3 h-3" />}
-                    {packet.category}
-                  </span>
-                  {packet.subcategory && (
-                    <span className="text-amber-400 font-medium px-1">
-                      → {packet.subcategory}
+          {filteredPackets.length === 0 ? (
+            <div className="p-8 text-center rounded-xl border border-neutral-800 bg-neutral-900/20 text-neutral-500 text-sm">
+              No intelligence packets found in this category.
+            </div>
+          ) : (
+            filteredPackets.map((packet) => (
+              <article 
+                key={packet.id} 
+                className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl"
+              >
+                {/* Meta */}
+                <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-neutral-700/50">
+                      {packet.category}
                     </span>
-                  )}
+                    <span>→</span>
+                    <span className="text-neutral-400">{packet.subCategory}</span>
+                  </div>
+                  <span>{packet.time}</span>
                 </div>
-                {packet.timestamp && (
-                  <span className="text-[11px] text-slate-500 bg-slate-950 px-2 py-0.5 rounded border border-slate-900">
-                    {packet.timestamp}
-                  </span>
-                )}
-              </div>
 
-              {/* Title & Bullet Points */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-bold text-slate-100 leading-snug">{packet.title}</h3>
-                {packet.summary_bullets && packet.summary_bullets.length > 0 && (
-                  <ul className="space-y-2.5 pl-1">
-                    {packet.summary_bullets.map((bullet, i) => (
-                      <li key={i} className="text-sm text-slate-300 flex items-start gap-2.5 leading-relaxed">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+                {/* Title */}
+                <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
+                  {packet.title}
+                </h2>
 
-              {/* Card Footer Actions */}
-              <div className="pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs text-slate-400">
-                <span>Via <strong className="text-slate-300">{packet.source || "Unknown"}</strong></span>
-                {packet.link && (
-                  <a href={packet.link} target="_blank" rel="noreferrer" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium transition-colors">
-                    Source <ExternalLink size={12} />
+                {/* Bullet Points */}
+                <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
+                  {packet.points.map((point, idx) => (
+                    <li key={idx} className="leading-relaxed pl-1">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Citation Footer */}
+                <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
+                  <span>Via <span className="font-semibold text-neutral-400">{packet.source}</span></span>
+                  <a 
+                    href={packet.sourceUrl} 
+                    className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium"
+                  >
+                    Source ↗
                   </a>
-                )}
-              </div>
-
-            </div>
-          ))}
-
-          {/* Empty State */}
-          {!loading && filtered.length === 0 && (
-            <div className="text-center py-12 border border-dashed border-slate-900 rounded-xl">
-              <p className="text-sm text-slate-500">No intelligence packets found in this category.</p>
-            </div>
+                </div>
+              </article>
+            ))
           )}
         </div>
       </main>
     </div>
   );
 }
-
-// Global mounting setup
-setTimeout(() => {
-  const container = document.getElementById('root');
-  if (container && !container._reactRootContainer) {
-    container._reactRootContainer = true;
-    const root = createRoot(container);
-    root.render(<App />);
-  }
-}, 0);
