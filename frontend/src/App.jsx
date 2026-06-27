@@ -139,15 +139,14 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-black">
+      {/* Header */}
       <header className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur sticky top-0 z-50 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-  <span className="text-xl">🔥</span>
-  <h1 className="text-xl font-black tracking-wider text-white">
-    WOTS-<span className="text-orange-500">HOT</span>
-  </h1>
-</div>
-
+            <span className="text-xl">🔥</span>
+            <h1 className="text-xl font-black tracking-wider text-white">
+              WOTS-<span className="text-orange-500">HOT</span>
+            </h1>
           </div>
           <button 
             onClick={handleRefresh}
@@ -165,6 +164,7 @@ export function App() {
           <p className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">Instant Intelligence Packets</p>
         </div>
 
+        {/* Category Filter Pills */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4">
           {categories.map((cat) => (
             <button
@@ -181,6 +181,7 @@ export function App() {
           ))}
         </div>
 
+        {/* Intelligence Feed List */}
         <div className="space-y-4">
           {filteredPackets.length === 0 ? (
             <div className="p-8 text-center rounded-xl border border-neutral-800 bg-neutral-900/20 text-neutral-500 text-sm">
