@@ -160,8 +160,11 @@ export function App() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Updated New Subheader */}
         <div>
-          <p className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">Instant Intelligence Packets</p>
+          <p className="text-xs font-bold tracking-widest text-neutral-400 uppercase">
+            What's <span className="text-orange-500">Hot</span> & What's New...
+          </p>
         </div>
 
         {/* Category Filter Pills */}
