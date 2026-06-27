@@ -1,5 +1,14 @@
 import React from 'react';
-import { Layers, Globe2, Scale, Briefcase, Cpu, Clapperboard, Trophy, HeartPulse } from 'lucide-react';
+import { Layers, Globe2, Scale, Briefcase, Cpu, Clapperboard, Trophy, HeartPulse } from 'lucide-import { createRoot } from 'react-dom/client';
+
+// This mounts the application into the HTML root div
+setTimeout(() => {
+  const container = document.getElementById('root');
+  if (container && !container._reactRootContainer) {
+    const root = createRoot(container);
+    root.render(<App />);
+  }
+}, 0);
 
 export const CATEGORY_LOGOS = {
   "All":           <Layers className="w-4 h-4" />,
