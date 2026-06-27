@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createRoot } from 'react-dom/client';
 
 // Massive realistic intelligence feed
 const initialPackets = [
@@ -118,17 +119,15 @@ const initialPackets = [
 
 const categories = ['All', 'World', 'Politics', 'Business', 'Technology', 'Entertainment', 'Sports'];
 
-export default function App() {
+export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [packets, setPackets] = useState(initialPackets);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Filter packets by category
   const filteredPackets = activeCategory === 'All'
     ? packets
     : packets.filter(p => p.category === activeCategory);
 
-  // Simulated dynamic refresh by shuffling data
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
@@ -140,7 +139,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-black">
-      {/* Header */}
       <header className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur sticky top-0 z-50 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -159,13 +157,11 @@ export default function App() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Intro */}
         <div>
           <p className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">Instant Intelligence Packets</p>
         </div>
 
-        {/* Category Pills */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4 mask-image">
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -181,7 +177,6 @@ export default function App() {
           ))}
         </div>
 
-        {/* Intelligence Feed */}
         <div className="space-y-4">
           {filteredPackets.length === 0 ? (
             <div className="p-8 text-center rounded-xl border border-neutral-800 bg-neutral-900/20 text-neutral-500 text-sm">
@@ -193,7 +188,6 @@ export default function App() {
                 key={packet.id} 
                 className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl"
               >
-                {/* Meta */}
                 <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
                   <div className="flex items-center gap-1.5">
                     <span className="px-2 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-neutral-700/50">
@@ -205,12 +199,10 @@ export default function App() {
                   <span>{packet.time}</span>
                 </div>
 
-                {/* Title */}
                 <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
                   {packet.title}
                 </h2>
 
-                {/* Bullet Points */}
                 <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
                   {packet.points.map((point, idx) => (
                     <li key={idx} className="leading-relaxed pl-1">
@@ -219,13 +211,9 @@ export default function App() {
                   ))}
                 </ul>
 
-                {/* Citation Footer */}
                 <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
                   <span>Via <span className="font-semibold text-neutral-400">{packet.source}</span></span>
-                  <a 
-                    href={packet.sourceUrl} 
-                    className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium"
-                  >
+                  <a href={packet.sourceUrl} className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium">
                     Source ↗
                   </a>
                 </div>
@@ -236,4 +224,11 @@ export default function App() {
       </main>
     </div>
   );
+}
+
+// Explicitly mount to the DOM right here
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
 }
