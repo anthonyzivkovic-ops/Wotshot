@@ -142,8 +142,12 @@ export function App() {
       <header className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur sticky top-0 z-50 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xl">🔥</span>
-            <h1 className="text-xl font-black tracking-wider text-white">WOTSHOT</h1>
+  <span className="text-xl">🔥</span>
+  <h1 className="text-xl font-black tracking-wider text-white">
+    WOTS-<span className="text-orange-500">HOT</span>
+  </h1>
+</div>
+
           </div>
           <button 
             onClick={handleRefresh}
