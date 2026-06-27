@@ -1,123 +1,109 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Massive realistic intelligence feed
+// Hyper-relevant New Zealand & mass-market data feed
 const initialPackets = [
   {
     id: 1,
-    category: 'Technology',
-    subCategory: 'Artificial Intelligence',
+    category: 'Entertainment',
+    subCategory: 'Streaming & Media',
     time: 'Just Now',
-    title: 'Next-Gen LLMs Introduce Native Multimodal Processing',
+    title: 'Major International Reality Franchise Confirms Upcoming New Zealand Season',
     points: [
-      'New architectures process live video feeds and speech natively without external transcription tools.',
-      'Token efficiency has improved by 40%, reducing operational inference costs significantly.',
-      'Context windows expand up to 2 million tokens across major cloud deployment endpoints.'
+      'Production crews slate location scouting across Queenstown and Auckland for late next month.',
+      'Local network executives hint at an unprecedented celebrity casting lineup to maximize domestic ratings.',
+      'The broadcast deal secures a prime-time slot alongside concurrent streaming drops on local platforms.'
     ],
-    source: 'TechCrunch',
+    source: 'NZ Herald',
     sourceUrl: '#'
   },
   {
     id: 2,
-    category: 'Business',
-    subCategory: 'Global Markets',
-    time: '14m ago',
-    title: 'Industrial Supply Chains Shift Toward Nearshoring Initiatives',
+    category: 'Sports',
+    subCategory: 'Rugby Union',
+    time: '12m ago',
+    title: 'All Blacks Squad Adjusts Training Workloads Ahead of Crucial Test Match',
     points: [
-      'Manufacturing firms increase capital allocation for regional logistics infrastructure.',
-      'Automation integration balances higher local labor costs in domestic facilities.',
-      'Just-in-time inventory models are being replaced by resilient strategic buffering.'
+      'Coaching staff implements specialized high-intensity tactical drills focusing on set-piece execution.',
+      'Key playmakers clear final fitness protocols following minor training-ground knocks.',
+      'Ticket sales across major regional stadiums see a rapid surge as match-day security parameters are finalized.'
     ],
-    source: 'Bloomberg',
+    source: 'Stuff.co.nz',
     sourceUrl: '#'
   },
   {
     id: 3,
-    category: 'Business',
-    subCategory: 'Energy Sector',
-    time: '45m ago',
-    title: 'Green Hydrogen Infrastructure Gains Major Industrial Backing',
+    category: 'Entertainment',
+    subCategory: 'Music & Events',
+    time: '34m ago',
+    title: 'Massive Summer Music Festival Announces First Wave Local Lineup',
     points: [
-      'New production facilities receive $1.2B in joint private-public infrastructure bonds.',
-      'Next-generation electrolyzers achieve a baseline 78% thermodynamic efficiency rating.',
-      'Heavy transport fleets outline multi-year adoption roadmaps starting late Q3.'
+      'Top-charting New Zealand electronic and indie acts locked in for multi-city outdoor dates.',
+      'Early-bird registration sets a new record baseline for regional event demand.',
+      'Organizers introduce enhanced logistics partnerships to streamline transit routes to festival grounds.'
     ],
-    source: 'Reuters',
+    source: 'UnderTheRadar',
     sourceUrl: '#'
   },
   {
     id: 4,
-    category: 'World',
-    subCategory: 'Trade Logistics',
+    category: 'Business',
+    subCategory: 'Retail & Economy',
     time: '1h ago',
-    title: 'Global Maritime Routes Face Increased Congestion at Key Chokepoints',
+    title: 'Domestic Fuel Pricing Trends Reflect Shifts Across Local Terminals',
     points: [
-      'Alternative rail corridors see a 22% spike in volume as shipping lines seek bypasses.',
-      'Freight insurance premiums adjust upward reflecting prolonged transit timelines.',
-      'Port authority automation updates deployed to accelerate customs processing.'
+      'Regional price variations stabilize slightly as localized competition patterns adjust.',
+      'Industry analysts track ongoing supply chain optimization strategies within national reserves.',
+      'Consumer advocacy groups recommend utilizing tracking apps to target optimal refueling windows.'
     ],
-    source: 'Financial Times',
+    source: 'Interest.co.nz',
     sourceUrl: '#'
   },
   {
     id: 5,
-    category: 'Politics',
-    subCategory: 'Regulation',
+    category: 'World',
+    subCategory: 'Pacific Aviation',
     time: '2h ago',
-    title: 'Cross-Border Data Privacy Frameworks Enter Enforcement Phase',
+    title: 'Trans-Tasman Airline Routes Expand Fleet Capacities for Peak Travel',
     points: [
-      'New compliance mandates impose strict operational localization on user analytics.',
-      'Enterprise cloud platforms deploy automated sovereign boundary guardrails.',
-      'Non-compliance penalties structured to scale directly with global gross revenue.'
+      'Carriers deploy larger wide-body aircraft to accommodate high-volume commuter corridors.',
+      'Competitive airfare pricing frameworks introduced for early booking allocations.',
+      'Airport hubs scale up frontline self-service customs kiosks to accelerate passenger processing.'
     ],
-    source: 'The Wall Street Journal',
+    source: 'Radio New Zealand',
     sourceUrl: '#'
   },
   {
     id: 6,
     category: 'Technology',
-    subCategory: 'Hardware & Silicon',
+    subCategory: 'Digital Infrastructure',
     time: '3h ago',
-    title: 'Sub-2nm Semiconductor Fab Facilities Begin Pilot Run Production',
+    title: 'Hyper-Scale Cloud Data Center officially Powers Up Infrastructure Hub',
     points: [
-      'Advanced High-NA EUV lithography systems achieve stable operational uptime.',
-      'Thermal dissipation thresholds improved by 15% using composite diamond substrates.',
-      'Initial wafer yields meet baseline requirements for early enterprise validation.'
+      'The multi-million dollar local facility goes live to support enterprise-grade digital services.',
+      'Architecture features localized backup arrays to maximize up-time against regional interruptions.',
+      'Tech sectors forecast expanded operational capacities for local software development pipelines.'
     ],
-    source: 'EETimes',
+    source: 'NBR',
     sourceUrl: '#'
   },
   {
     id: 7,
-    category: 'Entertainment',
-    subCategory: 'Digital Media',
+    category: 'Politics',
+    subCategory: 'Local Government',
     time: '4h ago',
-    title: 'Streaming Ecosystems Shift Monetization Toward Hybrid Tiers',
+    title: 'Regional Council Outlines Infrastructure Financing Frameworks',
     points: [
-      'Premium ad-supported subscriptions surpass traditional pure-play models in growth.',
-      'Licensing agreements pivot back to non-exclusive syndication networks.',
-      'Interactive community-driven content formats see increased production funding.'
+      'Capital allocation priorities focus on long-term roading resilience and public facility upgrades.',
+      'Community consultation periods open to gather feedback on proposed rate adjustments.',
+      'Collaborative funding partnerships with national transport agencies formalised for key corridors.'
     ],
-    source: 'Variety',
-    sourceUrl: '#'
-  },
-  {
-    id: 8,
-    category: 'Sports',
-    subCategory: 'Analytics',
-    time: '5h ago',
-    title: 'Biometric Tracking Integration Approved for Professional Leagues',
-    points: [
-      'Real-time physiological telemetry to be integrated directly into broadcast streams.',
-      'Collective bargaining agreements establish strict data ownership boundaries for athletes.',
-      'Predictive injury prevention algorithms adopted by top-tier medical staffs.'
-    ],
-    source: 'ESPN',
+    source: 'The Spinoff',
     sourceUrl: '#'
   }
 ];
 
-const categories = ['All', 'World', 'Politics', 'Business', 'Technology', 'Entertainment', 'Sports'];
+const categories = ['All', 'Entertainment', 'Sports', 'Business', 'World', 'Technology', 'Politics'];
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -148,19 +134,35 @@ export function App() {
               WOTS-<span className="text-orange-500">HOT</span>
             </h1>
           </div>
-          <button 
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all disabled:opacity-50"
-          >
-            <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
-            {isRefreshing ? 'Updating...' : 'Refresh'}
-          </button>
+          
+          <div className="flex items-center gap-4">
+            {/* Minimalist White SVG Map of New Zealand */}
+            <svg 
+              className="w-7 h-10 text-white fill-current opacity-85" 
+              viewBox="0 0 100 150" 
+              aria-label="New Zealand Map"
+            >
+              {/* North Island */}
+              <path d="M62,12 C58,15 52,22 55,26 C57,29 65,24 67,27 C70,32 55,42 58,47 C60,50 69,42 73,44 C78,46 72,56 68,58 C62,61 54,49 46,51 C40,53 43,60 41,65 C38,72 26,65 24,72 C22,78 30,81 33,86 C36,90 32,96 36,99 C40,102 46,95 49,91 C53,86 59,88 64,83 C68,78 69,67 73,63 C78,57 87,46 84,38 C82,32 73,34 71,28 C70,22 76,17 73,11 C70,6 64,8 62,12 Z" />
+              {/* South Island */}
+              <path d="M21,95 C17,98 12,106 15,111 C18,116 26,114 27,119 C28,125 18,133 22,138 C25,142 35,138 39,141 C43,143 42,148 48,146 C56,143 62,131 60,123 C58,116 48,115 47,108 C46,102 52,95 48,91 C43,87 36,95 31,93 C27,91 24,93 21,95 Z" />
+              {/* Stewart Island */}
+              <path d="M21,143 C20,144 19,147 21,148 C23,149 25,146 25,145 C24,143 22,142 21,143 Z" />
+            </svg>
+
+            <button 
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all disabled:opacity-50"
+            >
+              <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
+              {isRefreshing ? 'Updating...' : 'Refresh'}
+            </button>
+          </div>
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Updated New Subheader */}
         <div>
           <p className="text-xs font-bold tracking-widest text-neutral-400 uppercase">
             What's <span className="text-orange-500">Hot</span> & What's New...
@@ -188,7 +190,7 @@ export function App() {
         <div className="space-y-4">
           {filteredPackets.length === 0 ? (
             <div className="p-8 text-center rounded-xl border border-neutral-800 bg-neutral-900/20 text-neutral-500 text-sm">
-              No intelligence packets found in this category.
+              No updates found in this category.
             </div>
           ) : (
             filteredPackets.map((packet) => (
