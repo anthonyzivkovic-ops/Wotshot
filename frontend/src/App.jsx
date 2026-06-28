@@ -8,7 +8,7 @@ const getDynamicDateLabel = (baseDay, monthsAhead) => {
   return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 };
 
-// Clean Base Data Model (Seeded at 0 or real existing numbers, no longer randomized)
+// Clean Base Data Model
 const initialEvents = [
   {
     id: 'e1',
@@ -112,7 +112,7 @@ export function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [feedItems, setFeedItems] = useState([...initialEvents, ...initialPackets]);
 
-  // Live Counter Management (Initialized safely out of persistent engine storage)
+  // Live Counter Management (Stored in localStorage for persistent counts)
   const [flameRegistry, setFlameRegistry] = useState(() => {
     const saved = localStorage.getItem('wots_hot_flames_v1');
     if (saved) {
@@ -123,14 +123,12 @@ export function App() {
       }
     }
     
-    // Fallback compilation map using fixed baseline variables
     const initialMap = {};
     initialEvents.forEach(item => { initialMap[item.id] = { count: item.baseFlames, clicked: false }; });
     initialPackets.forEach(item => { initialMap[item.id] = { count: item.baseFlames, clicked: false }; });
     return initialMap;
   });
 
-  // Sync state modifications out to the physical data engine live
   useEffect(() => {
     localStorage.setItem('wots_hot_flames_v1', JSON.stringify(flameRegistry));
   }, [flameRegistry]);
@@ -148,11 +146,10 @@ export function App() {
     }, 600);
   };
 
-  // Safe live tracking transaction state modifier
   const handleFlameUp = (id) => {
     setFlameRegistry(prev => {
       const record = prev[id] || { count: 0, clicked: false };
-      if (record.clicked) return prev; // lock to one live transaction per device session
+      if (record.clicked) return prev; 
       return {
         ...prev,
         [id]: { count: record.count + 1, clicked: true }
@@ -170,15 +167,6 @@ export function App() {
     }
   };
 
-  // Centralized, unified header-level platform share link handler
-  const handleGlobalFacebookShare = (e) => {
-    e.preventDefault();
-    const siteUrl = window.location.href;
-    const shareText = "Check out what's lighting up right now in New Zealand on WOTS-HOT!";
-    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}&quote=${encodeURIComponent(shareText)}`;
-    window.open(fbUrl, '_blank', 'noopener,noreferrer,width=600,height=450');
-  };
-
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-black">
       {/* Header */}
@@ -192,18 +180,6 @@ export function App() {
           </div>
           
           <div className="flex items-center gap-2.5">
-            {/* Global Facebook Share Button with prominent white 'f' logo inside header navigation */}
-            <button
-              onClick={handleGlobalFacebookShare}
-              title="Share Page to Facebook Feed"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1877F2] hover:bg-[#166FE5] text-white text-xs font-bold transition-all shadow-md active:scale-95 border border-[#1877F2]/50"
-            >
-              <span className="font-serif text-sm font-black lowercase select-none bg-white text-[#1877F2] w-4 h-4 rounded-sm inline-flex items-center justify-center pt-0.5 pl-0.5">
-                f
-              </span>
-              <span>Share Feed</span>
-            </button>
-
             {/* Full-Color New Zealand Flag */}
             <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
               <rect width="600" height="300" fill="#00247d"/>
@@ -293,7 +269,7 @@ export function App() {
                     </button>
                   </div>
 
-                  {/* Clean Persistent Core Counter Component */}
+                  {/* Flame Counter */}
                   <button
                     onClick={() => handleFlameUp(item.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-extrabold tracking-tight select-none transition-all duration-200 transform active:scale-95 ${
