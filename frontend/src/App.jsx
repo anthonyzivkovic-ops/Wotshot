@@ -9,7 +9,7 @@ const getDynamicDateLabel = (baseDay, monthsAhead) => {
   return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 };
 
-// Expanded Mass-Market Events Grid across Auckland, Wellington & Christchurch
+// Expanded Mass-Market Events Grid with working platform links
 const initialEvents = [
   {
     id: 'e1',
@@ -23,7 +23,7 @@ const initialEvents = [
       'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
     ],
     source: 'Ticketmaster NZ',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.ticketmaster.co.nz'
   },
   {
     id: 'e2',
@@ -37,7 +37,7 @@ const initialEvents = [
       'Advance family and premium lounge ticket booking tiers open this week.'
     ],
     source: 'Event Cinemas',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.eventcinemas.co.nz'
   },
   {
     id: 'e3',
@@ -51,7 +51,7 @@ const initialEvents = [
       'Strictly limited door sales available alongside general admission passes.'
     ],
     source: 'Live Nation NZ',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.livenation.co.nz'
   },
   {
     id: 'e4',
@@ -65,7 +65,7 @@ const initialEvents = [
       'Part of the International Football Festival; expect an absolute packed house.'
     ],
     source: 'Eden Park Events',
-    sourceUrl: '#'
+    sourceUrl: 'https://edenpark.co.nz'
   },
   {
     id: 'e5',
@@ -79,7 +79,7 @@ const initialEvents = [
       'Doubleheader configurations and hospitality packages open to mass-market public booking pipelines.'
     ],
     source: 'Eden Park Events',
-    sourceUrl: '#'
+    sourceUrl: 'https://edenpark.co.nz'
   },
   {
     id: 'e6',
@@ -92,8 +92,8 @@ const initialEvents = [
       'The Grammy-winning vocal sensation brings her highly anticipated debut arena production to Kiwi fans.',
       'Final ticket allocations re-released following unprecedented early registration demand.'
     ],
-    source: 'Heart of the City',
-    sourceUrl: '#'
+    source: 'Ticketmaster NZ',
+    sourceUrl: 'https://www.ticketmaster.co.nz'
   },
   {
     id: 'e7',
@@ -107,7 +107,7 @@ const initialEvents = [
       'Massive appeal for local theatergoers; weekend evening shows tracking near capacity.'
     ],
     source: 'Ticketek New Zealand',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.ticketek.co.nz'
   },
   {
     id: 'e8',
@@ -120,8 +120,8 @@ const initialEvents = [
       'New Zealand’s premier culinary and brewing festival locks in over 60 independent regional hubs.',
       'Standard entry tickets include commemorative tasting kits and access to live music stages.'
     ],
-    source: 'WellingtonNZ',
-    sourceUrl: '#'
+    source: 'Sky Stadium',
+    sourceUrl: 'https://www.skystadium.co.nz'
   },
   {
     id: 'e9',
@@ -134,8 +134,8 @@ const initialEvents = [
       'The largest LEGO display in the South Island returns, featuring custom builds from over 200 global exhibitors.',
       'A massive weekend drawcard for families and casual collectors alike.'
     ],
-    source: 'ChristchurchNZ',
-    sourceUrl: '#'
+    source: 'Wolfbrook Arena',
+    sourceUrl: 'https://www.wolfbrookarena.co.nz'
   }
 ];
 
@@ -153,7 +153,7 @@ const initialPackets = [
       'The broadcast deal secures a prime-time slot alongside concurrent streaming drops on local platforms.'
     ],
     source: 'NZ Herald',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.nzherald.co.nz'
   },
   {
     id: 2,
@@ -167,7 +167,7 @@ const initialPackets = [
       'Ticket sales across major regional stadiums see a rapid surge as match-day security parameters are finalized.'
     ],
     source: 'Stuff.co.nz',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.stuff.co.nz'
   },
   {
     id: 3,
@@ -181,7 +181,7 @@ const initialPackets = [
       'Organizers introduce enhanced logistics partnerships to streamline transit routes to festival grounds.'
     ],
     source: 'UnderTheRadar',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.undertheradar.co.nz'
   },
   {
     id: 4,
@@ -195,7 +195,7 @@ const initialPackets = [
       'Consumer advocacy groups recommend utilizing tracking apps to target optimal refueling windows.'
     ],
     source: 'Interest.co.nz',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.interest.co.nz'
   },
   {
     id: 5,
@@ -209,7 +209,7 @@ const initialPackets = [
       'Airport hubs scale up frontline self-service customs kiosks to accelerate passenger processing.'
     ],
     source: 'Radio New Zealand',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.rnz.co.nz'
   },
   {
     id: 6,
@@ -223,7 +223,7 @@ const initialPackets = [
       'Tech sectors forecast expanded operational capacities for local software development pipelines.'
     ],
     source: 'NBR',
-    sourceUrl: '#'
+    sourceUrl: 'https://www.nbr.co.nz'
   },
   {
     id: 7,
@@ -237,63 +237,7 @@ const initialPackets = [
       'Collaborative funding partnerships with national transport agencies formalised for key corridors.'
     ],
     source: 'The Spinoff',
-    sourceUrl: '#'
-  },
-  {
-    id: 8,
-    category: 'Business',
-    subCategory: 'Commercial Property',
-    time: '5h ago',
-    title: 'Auckland and Christchurch Commercial Hubs Post Historic Construction Surges',
-    points: [
-      'Premium inner-city spaces observe accelerated fit-out completions ahead of Q3 leasing updates.',
-      'High sustainability green-star compliance ratings become mandatory baselines for commercial builds.',
-      'Investor portfolios tilt heavily toward tech-integrated flexible layouts.'
-    ],
-    source: 'NBR',
-    sourceUrl: '#'
-  },
-  {
-    id: 9,
-    category: 'Technology',
-    subCategory: 'Cybersecurity',
-    time: '6h ago',
-    title: 'National Cyber Security Center Warns Businesses of New Phishing Protocol',
-    points: [
-      'Advanced multi-stage social engineering campaigns target medium-sized corporate accounting teams.',
-      'IT networks issue swift multi-factor hardware key updates to secure remote client endpoints.',
-      'Staff awareness briefings standardise simulation training cycles across banking pipelines.'
-    ],
-    source: 'Geekzone',
-    sourceUrl: '#'
-  },
-  {
-    id: 10,
-    category: 'World',
-    subCategory: 'Global Logistics',
-    time: '7h ago',
-    title: 'Global Maritime Shipping Rates Stabilise Across Key Pacific Trade Lanes',
-    points: [
-      'Container backlogs clear efficiently at major deepwater transshipment ports.',
-      'Freight operators optimize seasonal schedules to minimize global carbon offset surcharges.',
-      'Importers report more predictable supply chains heading into peak spring retail stocking.'
-    ],
-    source: 'Reuters',
-    sourceUrl: '#'
-  },
-  {
-    id: 11,
-    category: 'Sports',
-    subCategory: 'Basketball',
-    time: '8h ago',
-    title: 'National Basketball League Final Series Tickets Sell Out Instantly',
-    points: [
-      'Unprecedented rush crashes online queues within seven minutes of public launch windows.',
-      'Championship rivalries hit peak momentum with local rosters reporting clean health clearances.',
-      'Broadcast syndicates expand coverage to auxiliary free-to-air local channels.'
-    ],
-    source: 'Sky Sport NZ',
-    sourceUrl: '#'
+    sourceUrl: 'https://thespinoff.co.nz'
   }
 ];
 
@@ -320,6 +264,20 @@ export function App() {
       setEvents(shuffledEvents);
       setIsRefreshing(false);
     }, 600);
+  };
+
+  // Safe external navigation utility with automated query fallback
+  const handleLinkNavigation = (e, item) => {
+    e.preventDefault();
+    
+    // If the url is just a placeholder or blank, generate a smart fallback search query URL
+    if (!item.sourceUrl || item.sourceUrl === '#') {
+      const query = encodeURIComponent(`${item.title} New Zealand tickets`);
+      window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noopener,noreferrer');
+    } else {
+      // Open the verified landing page cleanly in an isolated tab context
+      window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
@@ -445,9 +403,12 @@ export function App() {
 
                 <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
                   <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
-                  <a href={item.sourceUrl} className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium">
+                  <button 
+                    onClick={(e) => handleLinkNavigation(e, item)}
+                    className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
+                  >
                     {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
-                  </a>
+                  </button>
                 </div>
               </article>
             ))
