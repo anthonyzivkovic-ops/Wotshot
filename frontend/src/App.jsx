@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
 const getDynamicDateLabel = (baseDay, monthsAhead) => {
@@ -8,7 +8,7 @@ const getDynamicDateLabel = (baseDay, monthsAhead) => {
   return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 };
 
-// Seeded data objects with unique starting flames/lights counts
+// Clean Base Data Model (Seeded at 0 or real existing numbers, no longer randomized)
 const initialEvents = [
   {
     id: 'e1',
@@ -23,7 +23,7 @@ const initialEvents = [
     ],
     source: 'Ticketmaster NZ',
     sourceUrl: 'https://www.ticketmaster.co.nz',
-    initialFlames: 512
+    baseFlames: 120
   },
   {
     id: 'e2',
@@ -38,7 +38,7 @@ const initialEvents = [
     ],
     source: 'Event Cinemas',
     sourceUrl: 'https://www.eventcinemas.co.nz',
-    initialFlames: 341
+    baseFlames: 85
   },
   {
     id: 'e3',
@@ -53,7 +53,7 @@ const initialEvents = [
     ],
     source: 'Live Nation NZ',
     sourceUrl: 'https://www.livenation.co.nz',
-    initialFlames: 689
+    baseFlames: 214
   },
   {
     id: 'e4',
@@ -68,7 +68,7 @@ const initialEvents = [
     ],
     source: 'Eden Park Events',
     sourceUrl: 'https://edenpark.co.nz',
-    initialFlames: 1204
+    baseFlames: 450
   }
 ];
 
@@ -86,7 +86,7 @@ const initialPackets = [
     ],
     source: 'NZ Herald',
     sourceUrl: 'https://www.nzherald.co.nz',
-    initialFlames: 845
+    baseFlames: 63
   },
   {
     id: 'p2',
@@ -101,22 +101,7 @@ const initialPackets = [
     ],
     source: 'Stuff.co.nz',
     sourceUrl: 'https://www.stuff.co.nz',
-    initialFlames: 1440
-  },
-  {
-    id: 'p3',
-    category: 'Entertainment',
-    subCategory: 'Music & Events',
-    time: '34m ago',
-    title: 'Massive Summer Music Festival Announces First Wave Local Lineup',
-    points: [
-      'Top-charting New Zealand electronic and indie acts locked in for multi-city outdoor dates.',
-      'Early-bird registration sets a new record baseline for regional event demand.',
-      'Organizers introduce enhanced logistics partnerships to streamline transit routes to festival grounds.'
-    ],
-    source: 'UnderTheRadar',
-    sourceUrl: 'https://www.undertheradar.co.nz',
-    initialFlames: 412
+    baseFlames: 510
   }
 ];
 
@@ -125,16 +110,30 @@ const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'Wor
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  
-  // Track system interactions in local states dynamically
-  const [flameCounts, setFlameCounts] = useState(() => {
-    const registry = {};
-    initialEvents.forEach(e => registry[e.id] = { count: e.initialFlames, clicked: false });
-    initialPackets.forEach(p => registry[p.id] = { count: p.initialFlames, clicked: false });
-    return registry;
+  const [feedItems, setFeedItems] = useState([...initialEvents, ...initialPackets]);
+
+  // Live Counter Management (Initialized safely out of persistent engine storage)
+  const [flameRegistry, setFlameRegistry] = useState(() => {
+    const saved = localStorage.getItem('wots_hot_flames_v1');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed parsing live storage records", e);
+      }
+    }
+    
+    // Fallback compilation map using fixed baseline variables
+    const initialMap = {};
+    initialEvents.forEach(item => { initialMap[item.id] = { count: item.baseFlames, clicked: false }; });
+    initialPackets.forEach(item => { initialMap[item.id] = { count: item.baseFlames, clicked: false }; });
+    return initialMap;
   });
 
-  const [feedItems, setFeedItems] = useState([...initialEvents, ...initialPackets]);
+  // Sync state modifications out to the physical data engine live
+  useEffect(() => {
+    localStorage.setItem('wots_hot_flames_v1', JSON.stringify(flameRegistry));
+  }, [flameRegistry]);
 
   const filteredItems = activeCategory === 'All'
     ? feedItems
@@ -149,14 +148,14 @@ export function App() {
     }, 600);
   };
 
-  // Upgrades total counter instantly with smooth UI feedback hooks
+  // Safe live tracking transaction state modifier
   const handleFlameUp = (id) => {
-    setFlameCounts(prev => {
-      const current = prev[id];
-      if (current.clicked) return prev; // limit to one light up click per session
+    setFlameRegistry(prev => {
+      const record = prev[id] || { count: 0, clicked: false };
+      if (record.clicked) return prev; // lock to one live transaction per device session
       return {
         ...prev,
-        [id]: { count: current.count + 1, clicked: true }
+        [id]: { count: record.count + 1, clicked: true }
       };
     });
   };
@@ -171,17 +170,13 @@ export function App() {
     }
   };
 
-  // Formats context parameters dynamically and opens direct Facebook publishing dashboard
-  const handlePinToFacebook = (e, item) => {
+  // Centralized, unified header-level platform share link handler
+  const handleGlobalFacebookShare = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    
-    // Fallback share deployment points to live deployment parameters or primary domains
-    const currentSiteUrl = window.location.href;
-    const customShareText = `Check out this hot update in NZ: "${item.title}" via WOTS-HOT!`;
-    
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentSiteUrl)}&quote=${encodeURIComponent(customShareText)}`;
-    window.open(facebookShareUrl, '_blank', 'noopener,noreferrer,width=600,height=400');
+    const siteUrl = window.location.href;
+    const shareText = "Check out what's lighting up right now in New Zealand on WOTS-HOT!";
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}&quote=${encodeURIComponent(shareText)}`;
+    window.open(fbUrl, '_blank', 'noopener,noreferrer,width=600,height=450');
   };
 
   return (
@@ -196,7 +191,19 @@ export function App() {
             </h1>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            {/* Global Facebook Share Button with prominent white 'f' logo inside header navigation */}
+            <button
+              onClick={handleGlobalFacebookShare}
+              title="Share Page to Facebook Feed"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1877F2] hover:bg-[#166FE5] text-white text-xs font-bold transition-all shadow-md active:scale-95 border border-[#1877F2]/50"
+            >
+              <span className="font-serif text-sm font-black lowercase select-none bg-white text-[#1877F2] w-4 h-4 rounded-sm inline-flex items-center justify-center pt-0.5 pl-0.5">
+                f
+              </span>
+              <span>Share Feed</span>
+            </button>
+
             {/* Full-Color New Zealand Flag */}
             <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
               <rect width="600" height="300" fill="#00247d"/>
@@ -221,19 +228,12 @@ export function App() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all"
             >
               <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
-              {isRefreshing ? 'Updating...' : 'Refresh'}
             </button>
           </div>
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        <div>
-          <p className="text-xs font-bold tracking-widest text-neutral-400 uppercase">
-            What's <span className="text-orange-500">Hot</span> & What's New...
-          </p>
-        </div>
-
         {/* Category Filter Pills */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4">
           {categories.map((cat) => (
@@ -249,27 +249,16 @@ export function App() {
           ))}
         </div>
 
-        {/* Intelligence Feed List */}
+        {/* Dynamic List Stream */}
         <div className="space-y-4">
           {filteredItems.map((item) => {
-            const hasUserClicked = flameCounts[item.id]?.clicked;
-            const liveTotalFlames = flameCounts[item.id]?.count || 0;
+            const registryRecord = flameRegistry[item.id] || { count: 0, clicked: false };
+            const hasUserClicked = registryRecord.clicked;
+            const liveTotalFlames = registryRecord.count;
 
             return (
-              <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl relative group">
-                
-                {/* Top Right Header Actions Container */}
-                <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                  <button
-                    onClick={(e) => handlePinToFacebook(e, item)}
-                    title="Pin to Facebook Feed"
-                    className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 text-blue-400 hover:text-white transition-all text-xs shadow-md active:scale-90"
-                  >
-                    🔵
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500 pr-10">
+              <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl">
+                <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
                   <div className="flex items-center gap-1.5">
                     <span className={`px-2 py-0.5 rounded border text-xs font-bold ${
                       item.category === 'Events' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-neutral-800 text-neutral-300 border-neutral-700/50'
@@ -282,7 +271,7 @@ export function App() {
                   <span className={item.category === 'Events' ? 'text-amber-500 font-bold' : ''}>{item.time}</span>
                 </div>
 
-                <h2 className="text-lg font-bold text-white leading-snug tracking-tight pr-6">
+                <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
                   {item.title}
                 </h2>
 
@@ -292,7 +281,7 @@ export function App() {
                   ))}
                 </ul>
 
-                {/* Bottom Bar: Sourcing Actions and interactive engagement buttons */}
+                {/* Bottom Bar Controls Container */}
                 <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
                   <div>
                     <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
@@ -304,18 +293,18 @@ export function App() {
                     </button>
                   </div>
 
-                  {/* Mass Market Engagement Fire Component */}
+                  {/* Clean Persistent Core Counter Component */}
                   <button
                     onClick={() => handleFlameUp(item.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-extrabold tracking-tight select-none transition-all duration-200 transform active:scale-95 ${
                       hasUserClicked 
-                        ? 'bg-orange-500/20 border-orange-500 text-orange-400 shadow-lg shadow-orange-500/10 scale-105' 
+                        ? 'bg-orange-500/20 border-orange-500 text-orange-400 shadow-lg shadow-orange-500/10' 
                         : 'bg-neutral-900 border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white'
                     }`}
                   >
                     <span>{hasUserClicked ? '🔥 Lit!' : '🔥 Light It Up'}</span>
                     <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${
-                      hasUserClicked ? 'bg-orange-500 text-black' : 'bg-neutral-800 text-neutral-400 group-hover:text-neutral-200'
+                      hasUserClicked ? 'bg-orange-500 text-black' : 'bg-neutral-800 text-neutral-400'
                     }`}>
                       {liveTotalFlames.toLocaleString()}
                     </span>
