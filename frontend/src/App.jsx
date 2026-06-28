@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Helper function to dynamically get upcoming months
+// Helper function to dynamically calculate upcoming months relative to current date
 const getDynamicDateLabel = (baseDay, monthsAhead) => {
   const d = new Date();
   d.setMonth(d.getMonth() + monthsAhead);
@@ -9,18 +9,18 @@ const getDynamicDateLabel = (baseDay, monthsAhead) => {
   return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 };
 
-// Curated mass-market Events that calculate their dates dynamically based on current time
+// Expanded Mass-Market Events Grid across Auckland, Wellington & Christchurch
 const initialEvents = [
   {
     id: 'e1',
     category: 'Events',
-    subCategory: 'Concerts & Gigs',
-    time: getDynamicDateLabel(4, 1), // Dynamically outputs 1 month ahead
+    subCategory: 'Concerts & Stadium Gigs',
+    time: getDynamicDateLabel(4, 1), 
     title: 'The Neighbourhood: Live at Spark Arena',
     points: [
       'Location: Auckland | Spark Arena.',
-      'Massive global indie-rock headliners land in New Zealand for their highly anticipated world tour.',
-      'Tickets moving fast via mainstream local booking platforms for this prime Saturday night event.'
+      'Massive global indie-rock headliners arrive in New Zealand for their highly anticipated world tour.',
+      'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
     ],
     source: 'Ticketmaster NZ',
     sourceUrl: '#'
@@ -30,10 +30,10 @@ const initialEvents = [
     category: 'Events',
     subCategory: 'Cinema Blockbusters',
     time: getDynamicDateLabel(9, 1), 
-    title: 'Disney Blockbuster Premieres – Nationwide Commercial Cinematic Releases',
+    title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
     points: [
-      'Location: Auckland, Wellington & Christchurch theaters.',
-      'The highly anticipated new silver-screen seasonal headliner lands across all major commercial theater circuits.',
+      'Location: Hoyts & Event Cinemas (Auckland, Wellington, Christchurch).',
+      'The highly anticipated silver-screen seasonal headliner lands across all major commercial theater circuits.',
       'Advance family and premium lounge ticket booking tiers open this week.'
     ],
     source: 'Event Cinemas',
@@ -42,11 +42,11 @@ const initialEvents = [
   {
     id: 'e3',
     category: 'Events',
-    subCategory: 'Live Music',
+    subCategory: 'Live Music Festivals',
     time: getDynamicDateLabel(11, 1),
     title: 'Luude: Australasian Winter Tour Direct Hits',
     points: [
-      'Location: Wellington (Shed 6) & Auckland (Shed 10).',
+      'Location: Wellington (Shed 6) & Auckland (Shed 10 dates).',
       'The chart-topping electronic producer brings high-energy festival-tier sets directly to major regional venues.',
       'Strictly limited door sales available alongside general admission passes.'
     ],
@@ -62,7 +62,7 @@ const initialEvents = [
     points: [
       'Location: Auckland | Eden Park.',
       'English Premier League giants travel to local shores to take on Auckland FC in a massive stadium spectacle.',
-      'Part of the New Zealand International Football Festival; expect an absolute packed house.'
+      'Part of the International Football Festival; expect an absolute packed house.'
     ],
     source: 'Eden Park Events',
     sourceUrl: '#'
@@ -70,8 +70,8 @@ const initialEvents = [
   {
     id: 'e5',
     category: 'Events',
-    subCategory: 'Major Sports',
-    time: getDynamicDateLabel(8, 2), // Dynamically outputs 2 months ahead
+    subCategory: 'Major Sports Showcase',
+    time: getDynamicDateLabel(8, 2), 
     title: 'Chelsea FC Women vs Auckland FC Women Historic Match',
     points: [
       'Location: Auckland | Eden Park.',
@@ -94,10 +94,52 @@ const initialEvents = [
     ],
     source: 'Heart of the City',
     sourceUrl: '#'
+  },
+  {
+    id: 'e7',
+    category: 'Events',
+    subCategory: 'Live Theatre & Musicals',
+    time: getDynamicDateLabel(18, 1),
+    title: 'The Book of Mormon – Limited Regional Run',
+    points: [
+      'Location: Wellington | St James Theatre.',
+      'The Broadway smash-hit musical returns to New Zealand for an exclusive, highly energetic short season.',
+      'Massive appeal for local theatergoers; weekend evening shows tracking near capacity.'
+    ],
+    source: 'Ticketek New Zealand',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e8',
+    category: 'Events',
+    subCategory: 'Community Festivals',
+    time: getDynamicDateLabel(22, 2),
+    title: 'Beervana 2026 National Craft Showcase',
+    points: [
+      'Location: Wellington | Sky Stadium.',
+      'New Zealand’s premier culinary and brewing festival locks in over 60 independent regional hubs.',
+      'Standard entry tickets include commemorative tasting kits and access to live music stages.'
+    ],
+    source: 'WellingtonNZ',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e9',
+    category: 'Events',
+    subCategory: 'Family & Exhibition',
+    time: getDynamicDateLabel(29, 1),
+    title: 'The Great Christchurch Brick Show 2026',
+    points: [
+      'Location: Christchurch | Wolfbrook Arena.',
+      'The largest LEGO display in the South Island returns, featuring custom builds from over 200 global exhibitors.',
+      'A massive weekend drawcard for families and casual collectors alike.'
+    ],
+    source: 'ChristchurchNZ',
+    sourceUrl: '#'
   }
 ];
 
-// Hyper-relevant New Zealand News Data Feed
+// Expanded Hyper-Relevant New Zealand News & Lifestyle Feed
 const initialPackets = [
   {
     id: 1,
@@ -168,10 +210,94 @@ const initialPackets = [
     ],
     source: 'Radio New Zealand',
     sourceUrl: '#'
+  },
+  {
+    id: 6,
+    category: 'Technology',
+    subCategory: 'Digital Infrastructure',
+    time: '3h ago',
+    title: 'Hyper-Scale Cloud Data Center officially Powers Up Infrastructure Hub',
+    points: [
+      'The multi-million dollar local facility goes live to support enterprise-grade digital services.',
+      'Architecture features localized backup arrays to maximize up-time against regional interruptions.',
+      'Tech sectors forecast expanded operational capacities for local software development pipelines.'
+    ],
+    source: 'NBR',
+    sourceUrl: '#'
+  },
+  {
+    id: 7,
+    category: 'Politics',
+    subCategory: 'Local Government',
+    time: '4h ago',
+    title: 'Regional Council Outlines Infrastructure Financing Frameworks',
+    points: [
+      'Capital allocation priorities focus on long-term roading resilience and public facility upgrades.',
+      'Community consultation periods open to gather feedback on proposed rate adjustments.',
+      'Collaborative funding partnerships with national transport agencies formalised for key corridors.'
+    ],
+    source: 'The Spinoff',
+    sourceUrl: '#'
+  },
+  {
+    id: 8,
+    category: 'Business',
+    subCategory: 'Commercial Property',
+    time: '5h ago',
+    title: 'Auckland and Christchurch Commercial Hubs Post Historic Construction Surges',
+    points: [
+      'Premium inner-city spaces observe accelerated fit-out completions ahead of Q3 leasing updates.',
+      'High sustainability green-star compliance ratings become mandatory baselines for commercial builds.',
+      'Investor portfolios tilt heavily toward tech-integrated flexible layouts.'
+    ],
+    source: 'NBR',
+    sourceUrl: '#'
+  },
+  {
+    id: 9,
+    category: 'Technology',
+    subCategory: 'Cybersecurity',
+    time: '6h ago',
+    title: 'National Cyber Security Center Warns Businesses of New Phishing Protocol',
+    points: [
+      'Advanced multi-stage social engineering campaigns target medium-sized corporate accounting teams.',
+      'IT networks issue swift multi-factor hardware key updates to secure remote client endpoints.',
+      'Staff awareness briefings standardise simulation training cycles across banking pipelines.'
+    ],
+    source: 'Geekzone',
+    sourceUrl: '#'
+  },
+  {
+    id: 10,
+    category: 'World',
+    subCategory: 'Global Logistics',
+    time: '7h ago',
+    title: 'Global Maritime Shipping Rates Stabilise Across Key Pacific Trade Lanes',
+    points: [
+      'Container backlogs clear efficiently at major deepwater transshipment ports.',
+      'Freight operators optimize seasonal schedules to minimize global carbon offset surcharges.',
+      'Importers report more predictable supply chains heading into peak spring retail stocking.'
+    ],
+    source: 'Reuters',
+    sourceUrl: '#'
+  },
+  {
+    id: 11,
+    category: 'Sports',
+    subCategory: 'Basketball',
+    time: '8h ago',
+    title: 'National Basketball League Final Series Tickets Sell Out Instantly',
+    points: [
+      'Unprecedented rush crashes online queues within seven minutes of public launch windows.',
+      'Championship rivalries hit peak momentum with local rosters reporting clean health clearances.',
+      'Broadcast syndicates expand coverage to auxiliary free-to-air local channels.'
+    ],
+    source: 'Sky Sport NZ',
+    sourceUrl: '#'
   }
 ];
 
-const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World'];
+const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World', 'Technology', 'Politics'];
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -320,7 +446,7 @@ export function App() {
                 <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
                   <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
                   <a href={item.sourceUrl} className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium">
-                    {item.category === 'Events' ? 'Book Tickets ↗' : 'Source 2 ↗'}
+                    {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
                   </a>
                 </div>
               </article>
@@ -332,7 +458,6 @@ export function App() {
   );
 }
 
-// Explicitly mount to the DOM right here
 const container = document.getElementById('root');
 if (container) {
   const root = createRoot(container);
