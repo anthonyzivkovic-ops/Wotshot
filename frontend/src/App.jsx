@@ -41,7 +41,6 @@ export function App() {
         .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
     }
 
-    // "All" tab view pipeline split logic
     const timedItems = initialFeedItems
       .filter(item => item.category !== 'Places to Dine')
       .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
@@ -53,8 +52,19 @@ export function App() {
 
   const filteredItems = getSortedItems();
 
-  const handleLinkNavigation = (url) => {
-    if (url && url !== '#') {
+  // 🛡️ Intelligent fallback navigation handler to prevent 404s
+  const handleLinkNavigation = (item) => {
+    const url = item.sourceUrl;
+    
+    // If the URL is just a homepage base structure or lacks a specific subroute, build a clean targeted query
+    const urlObj = new URL(url);
+    if (urlObj.pathname === '/' && !urlObj.search) {
+      const isDining = item.category === 'Places to Dine';
+      const suffix = isDining ? 'restaurant menu new zealand' : 'tickets booking new zealand';
+      const fallbackQuery = encodeURIComponent(`${item.title} ${suffix}`);
+      window.open(`https://www.google.com/search?q=${fallbackQuery}`, '_blank', 'noopener,noreferrer');
+    } else {
+      // Use structured query path
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
@@ -72,7 +82,6 @@ export function App() {
           </div>
           
           <div className="flex items-center gap-2.5">
-            {/* New Zealand Flag Badge */}
             <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
               <rect width="600" height="300" fill="#00247d"/>
               <g transform="scale(0.5)">
@@ -156,7 +165,7 @@ export function App() {
                 <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
                   <span>Source: <span className="font-semibold text-neutral-400">{item.source}</span></span>
                   <button 
-                    onClick={() => handleLinkNavigation(item.sourceUrl)}
+                    onClick={() => handleLinkNavigation(item)}
                     className="text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0 text-xs tracking-wide"
                   >
                     {isDining ? 'View Menu ↗' : 'Book Tickets ↗'}
