@@ -1,7 +1,7 @@
 // Internal timestamp conversion engine to secure accurate calendar sorting calculations
 export const parseFeedDate = (dateStr) => {
   if (!dateStr || dateStr.includes('Now') || dateStr.includes('Rated') || dateStr.includes('Favorite') || dateStr.includes('Trending')) {
-    return new Date(8640000000000000); // Send dynamic items without fixed calendar slots to the absolute bottom
+    return new Date(8640000000000000); 
   }
   const parts = dateStr.split(' ');
   if (parts.length === 3) {
@@ -33,7 +33,7 @@ export const initialFeedItems = [
       'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
     ],
     source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz/the-neighbourhood-tickets/artist/1769438'
+    sourceUrl: 'https://www.ticketmaster.co.nz/search?q=The+Neighbourhood'
   },
   {
     id: 'c2',
@@ -48,7 +48,7 @@ export const initialFeedItems = [
       'Strictly limited door sales available alongside general admission passes.'
     ],
     source: 'Live Nation NZ',
-    sourceUrl: 'https://www.livenation.co.nz/artist-luude-1349814'
+    sourceUrl: 'https://www.livenation.co.nz/search?keyword=Luude'
   },
   {
     id: 'c3',
@@ -63,7 +63,7 @@ export const initialFeedItems = [
       'Strict digital-only entry verification tickets are locked exclusively via official mobile box offices.'
     ],
     source: 'Ticketek NZ',
-    sourceUrl: 'https://premier.ticketek.co.nz/shows/show.aspx?sh=FREDAGAIN26'
+    sourceUrl: 'https://premier.ticketek.co.nz/search/SearchResults.aspx?k=Fred+again'
   },
   {
     id: 'c4',
@@ -78,7 +78,7 @@ export const initialFeedItems = [
       'Premium field and structural golden-circle passes are selling fast through regional platforms.'
     ],
     source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz/foo-fighters-tickets/artist/776005'
+    sourceUrl: 'https://www.ticketmaster.co.nz/search?q=Foo+Fighters'
   },
 
   // ==========================================
@@ -97,7 +97,7 @@ export const initialFeedItems = [
       'Part of the International Football Festival; expect an absolute packed house.'
     ],
     source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz/view-event/tottenham-hotspur-vs-auckland-fc-2026'
+    sourceUrl: 'https://edenpark.co.nz/whats-on/'
   },
   {
     id: 's2',
@@ -112,7 +112,7 @@ export const initialFeedItems = [
       'Corporate hospitality suites and public grandstand ticket tiers are open via main channels.'
     ],
     source: 'Sky Stadium Box Office',
-    sourceUrl: 'https://www.skystadium.co.nz/whats-on/event/all-blacks-v-australia-2026'
+    sourceUrl: 'https://www.skystadium.co.nz/whats-on/'
   },
   {
     id: 's3',
@@ -127,7 +127,7 @@ export const initialFeedItems = [
       'Court-side lounge packages and standard fan seating brackets are accessible via direct links.'
     ],
     source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz/nz-breakers-tickets/artist/1154541'
+    sourceUrl: 'https://www.ticketmaster.co.nz/search?q=Breakers'
   },
 
   // ==========================================
@@ -146,7 +146,7 @@ export const initialFeedItems = [
       'Advance family and premium lounge ticket booking tiers open this week.'
     ],
     source: 'Event Cinemas',
-    sourceUrl: 'https://www.eventcinemas.co.nz/Movies/Promotions'
+    sourceUrl: 'https://www.eventcinemas.co.nz/'
   },
   {
     id: 'm2',
@@ -160,23 +160,8 @@ export const initialFeedItems = [
       'The premier presentation of award-winning global arthouse and underground features.',
       'Opening gala package passes and single-film validation vouchers are managed directly via Ticketek.'
     ],
-    source: 'NZIFF Ticket Portal',
-    sourceUrl: 'https://www.nziff.co.nz/2026/christchurch/ticketing/'
-  },
-  {
-    id: 'm3',
-    category: 'Movies',
-    subCategory: 'Sci-Fi IMAX Experience',
-    time: '03 Sep 2026',
-    title: 'Interstellar Realignment: Special 70mm IMAX IMAX Showcase',
-    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland | Event Cinemas Queen Street.',
-      'A spectacular anniversary screening re-engineered for the Southern Hemisphere\'s largest high-contrast display setup.',
-      'Premium central row bookings are strictly limited and sold directly online.'
-    ],
-    source: 'Event Cinemas Queen St',
-    sourceUrl: 'https://www.eventcinemas.co.nz/Cinema/Queen-Street'
+    source: 'NZIFF Portal',
+    sourceUrl: 'https://www.nziff.co.nz/'
   },
 
   // ==========================================
@@ -194,8 +179,8 @@ export const initialFeedItems = [
       'A stunning Parisian-style glasshouse dining room serving classic French techniques with premium New Zealand seafood and meats.',
       'Highly recommended: The fresh structural seafood platters and their tailored gin cocktail pairings.'
     ],
-    source: 'Origine Menu Interface',
-    sourceUrl: 'https://www.origine.nz/menu'
+    source: 'Origine Auckland',
+    sourceUrl: 'https://www.origine.nz/'
   },
   {
     id: 'd2',
@@ -209,8 +194,8 @@ export const initialFeedItems = [
       'Sit directly at the theater-style brass counter to watch chefs construct award-winning, innovative South Island plates.',
       'Securing reservations 2-3 weeks in advance is highly recommended for weekend dinner sittings.'
     ],
-    source: 'Inati Bookings & Menus',
-    sourceUrl: 'https://inati.nz/menu/'
+    source: 'Inati Christchurch',
+    sourceUrl: 'https://inati.nz/'
   },
   {
     id: 'd3',
@@ -224,8 +209,8 @@ export const initialFeedItems = [
       'An airy, rustic-industrial space focused on wood-fired specialty grains, charcuterie, and rotating organic vegetable highlights.',
       'Perfect choice for casual brunch clusters or ambient low-lit evening group dinner arrangements.'
     ],
-    source: 'Loretta Cuba St Menu',
-    sourceUrl: 'https://www.loretta.net.nz/menu'
+    source: 'Loretta Cuba St',
+    sourceUrl: 'https://www.loretta.net.nz/'
   },
   {
     id: 'd4',
@@ -239,23 +224,8 @@ export const initialFeedItems = [
       'Immersive, moody design meets boundary-pushing premium Asian execution along the buzzing retail terrace.',
       'The signature crispy red duck curry and premium local Sauvignon cuts dominate the current seasonal menus.'
     ],
-    source: 'King of Snake Digital Menu',
-    sourceUrl: 'https://kingofsnake.co.nz/menus/'
-  },
-  {
-    id: 'd5',
-    category: 'Places to Dine',
-    subCategory: 'Auckland Casual',
-    time: 'High Demand',
-    title: 'Prego: Iconic Italian Trattoria in Ponsonby',
-    imageUrl: 'https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland | Ponsonby Road.',
-      'A legendary brick courtyard institution serving unmatched woodfired pizzas, fresh pasta, and dynamic bistro staples.',
-      'Maintains a popular walk-in structure alongside early lunch booking availability.'
-    ],
-    source: 'Prego Ponsonby Menu',
-    sourceUrl: 'https://www.prego.co.nz/menu'
+    source: 'King of Snake',
+    sourceUrl: 'https://kingofsnake.co.nz/'
   },
 
   // ==========================================
@@ -274,21 +244,6 @@ export const initialFeedItems = [
       'Corporate hospitality suites and weekend matinee allocations opening to the public early.'
     ],
     source: 'Auckland Live Box Office',
-    sourceUrl: 'https://www.aucklandlive.co.nz/show/wicked-the-musical-2026'
-  },
-  {
-    id: 'o2',
-    category: 'Other',
-    subCategory: 'Comedy Gala',
-    time: '29 Oct 2026',
-    title: 'NZ International Comedy Festival Highlight Showcase',
-    imageUrl: 'https://images.unsplash.com/photo-1516280440614-37939bbacd6a?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Wellington | The Opera House.',
-      'A dense, high-caliber line-up hosting top-tier trans-Tasman stand-up artists across one grand performance evening.',
-      'Single-seat allocations and VIP floor tables can be processed seamlessly through verified ticket routes.'
-    ],
-    source: 'Ticketmaster Booking Hub',
-    sourceUrl: 'https://www.ticketmaster.co.nz/nz-international-comedy-festival-tickets/artist/1852203'
+    sourceUrl: 'https://www.aucklandlive.co.nz/'
   }
 ];
