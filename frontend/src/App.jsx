@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-const getDynamicDateLabel = (baseDay, monthsAhead) => {
-  const d = new Date();
-  d.setMonth(d.getMonth() + monthsAhead);
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-};
-
-// Clean Base Data Model
+// Clean Base Data Model with static date strings
 const initialEvents = [
   {
     id: 'e1',
     category: 'Events',
     subCategory: 'Concerts & Stadium Gigs',
-    time: getDynamicDateLabel(4, 1), 
+    time: '04 Aug 2026', 
     title: 'The Neighbourhood: Live at Spark Arena',
     points: [
       'Location: Auckland | Spark Arena.',
@@ -22,14 +15,13 @@ const initialEvents = [
       'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
     ],
     source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz',
-    baseFlames: 120
+    sourceUrl: 'https://www.ticketmaster.co.nz'
   },
   {
     id: 'e2',
     category: 'Events',
     subCategory: 'Cinema Blockbusters',
-    time: getDynamicDateLabel(9, 1), 
+    time: '09 Aug 2026', 
     title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
     points: [
       'Location: Hoyts & Event Cinemas (Auckland, Wellington, Christchurch).',
@@ -37,14 +29,13 @@ const initialEvents = [
       'Advance family and premium lounge ticket booking tiers open this week.'
     ],
     source: 'Event Cinemas',
-    sourceUrl: 'https://www.eventcinemas.co.nz',
-    baseFlames: 85
+    sourceUrl: 'https://www.eventcinemas.co.nz'
   },
   {
     id: 'e3',
     category: 'Events',
     subCategory: 'Live Music Festivals',
-    time: getDynamicDateLabel(11, 1),
+    time: '11 Aug 2026',
     title: 'Luude: Australasian Winter Tour Direct Hits',
     points: [
       'Location: Wellington (Shed 6) & Auckland (Shed 10 dates).',
@@ -52,14 +43,13 @@ const initialEvents = [
       'Strictly limited door sales available alongside general admission passes.'
     ],
     source: 'Live Nation NZ',
-    sourceUrl: 'https://www.livenation.co.nz',
-    baseFlames: 214
+    sourceUrl: 'https://www.livenation.co.nz'
   },
   {
     id: 'e4',
     category: 'Events',
     subCategory: 'International Football',
-    time: getDynamicDateLabel(26, 1),
+    time: '26 Aug 2026',
     title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
     points: [
       'Location: Auckland | Eden Park.',
@@ -67,8 +57,7 @@ const initialEvents = [
       'Part of the International Football Festival; expect an absolute packed house.'
     ],
     source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz',
-    baseFlames: 450
+    sourceUrl: 'https://edenpark.co.nz'
   }
 ];
 
@@ -85,8 +74,7 @@ const initialPackets = [
       'The broadcast deal secures a prime-time slot alongside concurrent streaming drops on local platforms.'
     ],
     source: 'NZ Herald',
-    sourceUrl: 'https://www.nzherald.co.nz',
-    baseFlames: 63
+    sourceUrl: 'https://www.nzherald.co.nz'
   },
   {
     id: 'p2',
@@ -100,8 +88,7 @@ const initialPackets = [
       'Ticket sales across major regional stadiums see a rapid surge as match-day security parameters are finalized.'
     ],
     source: 'Stuff.co.nz',
-    sourceUrl: 'https://www.stuff.co.nz',
-    baseFlames: 510
+    sourceUrl: 'https://www.stuff.co.nz'
   }
 ];
 
@@ -111,27 +98,6 @@ export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [feedItems, setFeedItems] = useState([...initialEvents, ...initialPackets]);
-
-  // Live Counter Management (Stored in localStorage for persistent counts)
-  const [flameRegistry, setFlameRegistry] = useState(() => {
-    const saved = localStorage.getItem('wots_hot_flames_v1');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed parsing live storage records", e);
-      }
-    }
-    
-    const initialMap = {};
-    initialEvents.forEach(item => { initialMap[item.id] = { count: item.baseFlames, clicked: false }; });
-    initialPackets.forEach(item => { initialMap[item.id] = { count: item.baseFlames, clicked: false }; });
-    return initialMap;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('wots_hot_flames_v1', JSON.stringify(flameRegistry));
-  }, [flameRegistry]);
 
   const filteredItems = activeCategory === 'All'
     ? feedItems
@@ -144,17 +110,6 @@ export function App() {
       setFeedItems(shuffled);
       setIsRefreshing(false);
     }, 600);
-  };
-
-  const handleFlameUp = (id) => {
-    setFlameRegistry(prev => {
-      const record = prev[id] || { count: 0, clicked: false };
-      if (record.clicked) return prev; 
-      return {
-        ...prev,
-        [id]: { count: record.count + 1, clicked: true }
-      };
-    });
   };
 
   const handleLinkNavigation = (e, item) => {
@@ -228,10 +183,6 @@ export function App() {
         {/* Dynamic List Stream */}
         <div className="space-y-4">
           {filteredItems.map((item) => {
-            const registryRecord = flameRegistry[item.id] || { count: 0, clicked: false };
-            const hasUserClicked = registryRecord.clicked;
-            const liveTotalFlames = registryRecord.count;
-
             return (
               <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl">
                 <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
@@ -258,32 +209,13 @@ export function App() {
                 </ul>
 
                 {/* Bottom Bar Controls Container */}
-                <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
-                  <div>
-                    <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
-                    <button 
-                      onClick={(e) => handleLinkNavigation(e, item)}
-                      className="ml-3 text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
-                    >
-                      {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
-                    </button>
-                  </div>
-
-                  {/* Flame Counter */}
-                  <button
-                    onClick={() => handleFlameUp(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-extrabold tracking-tight select-none transition-all duration-200 transform active:scale-95 ${
-                      hasUserClicked 
-                        ? 'bg-orange-500/20 border-orange-500 text-orange-400 shadow-lg shadow-orange-500/10' 
-                        : 'bg-neutral-900 border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white'
-                    }`}
+                <div className="pt-3 border-t border-neutral-800/60 flex items-center text-xs text-neutral-500">
+                  <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
+                  <button 
+                    onClick={(e) => handleLinkNavigation(e, item)}
+                    className="ml-3 text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
                   >
-                    <span>{hasUserClicked ? '🔥 Lit!' : '🔥 Light It Up'}</span>
-                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${
-                      hasUserClicked ? 'bg-orange-500 text-black' : 'bg-neutral-800 text-neutral-400'
-                    }`}>
-                      {liveTotalFlames.toLocaleString()}
-                    </span>
+                    {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
                   </button>
                 </div>
               </article>
