@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Hardened, production-grade assets (Using bulletproof CDN links)
-const initialEvents = [
+// Hardened "What's Coming Up" Data Model with varied dates for sorting verification
+const initialFeedItems = [
   {
-    id: 'e1',
-    category: 'Events',
-    subCategory: 'Concerts & Stadium Gigs',
-    time: '04 Aug 2026', 
+    id: 'c1',
+    category: 'Concerts',
+    subCategory: 'Stadium Gigs',
+    time: '04 Aug 2026', // August 4
     title: 'The Neighbourhood: Live at Spark Arena',
     imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop',
     points: [
@@ -19,10 +19,10 @@ const initialEvents = [
     sourceUrl: 'https://www.ticketmaster.co.nz'
   },
   {
-    id: 'e2',
-    category: 'Events',
+    id: 'm1',
+    category: 'Movies',
     subCategory: 'Cinema Blockbusters',
-    time: '09 Aug 2026', 
+    time: '09 Aug 2026', // August 9
     title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
     imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop',
     points: [
@@ -34,10 +34,10 @@ const initialEvents = [
     sourceUrl: 'https://www.eventcinemas.co.nz'
   },
   {
-    id: 'e3',
-    category: 'Events',
-    subCategory: 'Live Music Festivals',
-    time: '11 Aug 2026',
+    id: 'c2',
+    category: 'Concerts',
+    subCategory: 'Winter Music Festivals',
+    time: '11 Aug 2026', // August 11
     title: 'Luude: Australasian Winter Tour Direct Hits',
     imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop',
     points: [
@@ -49,10 +49,10 @@ const initialEvents = [
     sourceUrl: 'https://www.livenation.co.nz'
   },
   {
-    id: 'e4',
-    category: 'Events',
+    id: 's1',
+    category: 'Sporting Events',
     subCategory: 'International Football',
-    time: '26 Aug 2026',
+    time: '26 Aug 2026', // August 26
     title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
     imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop',
     points: [
@@ -64,10 +64,10 @@ const initialEvents = [
     sourceUrl: 'https://edenpark.co.nz'
   },
   {
-    id: 'e5',
-    category: 'Events',
+    id: 'o1',
+    category: 'Other',
     subCategory: 'Live Theatre & Musicals',
-    time: '22 Oct 2026',
+    time: '22 Oct 2026', // October 22 (Furthest out date)
     title: 'Wicked The Musical: Star-Studded Civic Run',
     imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&auto=format&fit=crop',
     points: [
@@ -77,142 +77,64 @@ const initialEvents = [
     ],
     source: 'Auckland Live',
     sourceUrl: 'https://www.aucklandlive.co.nz'
+  },
+
+  // PLACES TO DINE (No concrete event dates, stays pinned beautifully below chronological timelines)
+  {
+    id: 'd1',
+    category: 'Places to Dine',
+    subCategory: 'Auckland Culinary Hotspots',
+    time: 'Trending Now',
+    title: 'Origine: Modern French Bistro Elegance in Commercial Bay',
+    imageUrl: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&auto=format&fit=crop',
+    points: [
+      'Location: Auckland CBD | Commercial Bay.',
+      'A stunning Parisian-style glasshouse dining room serving classic French techniques with premium New Zealand seafood and meats.',
+      'Highly recommended: The fresh structural seafood platters and their tailored gin cocktail pairings.'
+    ],
+    source: 'Viva Magazine',
+    sourceUrl: 'https://www.viva.co.nz'
+  },
+  {
+    id: 'd2',
+    category: 'Places to Dine',
+    subCategory: 'Christchurch Eateries',
+    time: 'Highly Rated',
+    title: 'Inati: Elegant Neo-Classic Chef\'s Table Experience',
+    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop',
+    points: [
+      'Location: Christchurch | Hereford Street.',
+      'Sit directly at the theater-style brass counter to watch chefs construct award-winning, innovative South Island plates.',
+      'Securing reservations 2-3 weeks in advance is highly recommended for weekend dinner sittings.'
+    ],
+    source: 'Cuisine Magazine',
+    sourceUrl: 'https://www.cuisine.co.nz'
+  },
+  {
+    id: 'd3',
+    category: 'Places to Dine',
+    subCategory: 'Wellington Bistro',
+    time: 'Local Favorite',
+    title: 'Loretta: Artisanal Seasonal Inner-City Dining',
+    imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop',
+    points: [
+      'Location: Wellington | Cuba Street.',
+      'An airy, rustic-industrial space focused on wood-fired specialty grains, charcuterie, and rotating organic vegetable highlights.',
+      'Perfect choice for casual brunch clusters or ambient low-lit evening group dinner arrangements.'
+    ],
+    source: 'Denizen',
+    sourceUrl: 'https://www.thedenizen.co.nz'
   }
 ];
 
-const initialPackets = [
-  {
-    id: 's1',
-    category: 'Sports',
-    subCategory: 'Basketball - NBA',
-    time: '5m ago',
-    title: 'NBA Finals: Underdog Franchise Clinches Championship Title in Game 7 Thriller',
-    imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&auto=format&fit=crop',
-    points: [
-      'A thrilling buzzer-beater shot in the final seconds seals a historic comeback victory to claim the trophy.',
-      'The finals MVP breaks tournament records for the highest total point contribution in a closing series.',
-      'Parade routes and celebratory schedules are finalized as fans flood metropolitan areas globally.'
-    ],
-    source: 'ESPN',
-    sourceUrl: 'https://www.espn.com'
-  },
-  {
-    id: 's2',
-    category: 'Sports',
-    subCategory: 'Tennis - Grand Slam',
-    time: '12m ago',
-    title: 'Wimbledon: Top Seed Overcomes Injury to Secure Grand Slam Title',
-    imageUrl: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=800&auto=format&fit=crop',
-    points: [
-      'The multi-hour baseline duel ends in an absolute classic five-set tiebreaker on Center Court.',
-      'Medical staff cleared minor knee strains during an intense third-set tactical intermission.',
-      'The global rankings list officially cements the champion at the world number one spot.'
-    ],
-    source: 'BBC Sport',
-    sourceUrl: 'https://www.bbc.com/sport'
-  },
-  {
-    id: 's3',
-    category: 'Sports',
-    subCategory: 'Football - UEFA',
-    time: '45m ago',
-    title: 'Champions League: Tactical Masterclass Books Spot in European Grand Final',
-    imageUrl: 'https://images.unsplash.com/photo-1518091043644-c1d445bccb59?w=800&auto=format&fit=crop',
-    points: [
-      'A late second-half counter-attacking structure breaks down a stubborn defensive backline configuration.',
-      'Club executives confirm historic broadcast viewership figures across global streaming networks.',
-      'The grand final venue initiates premium stadium preparations ahead of next month\'s fixture.'
-    ],
-    source: 'Sky Sports',
-    sourceUrl: 'https://www.skysports.com'
-  },
-  {
-    id: 'en1',
-    category: 'Entertainment',
-    subCategory: 'Streaming & Media',
-    time: 'Just Now',
-    title: 'Major International Reality Franchise Confirms Upcoming New Zealand Season',
-    imageUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&auto=format&fit=crop',
-    points: [
-      'Production crews slate location scouting across Queenstown and Auckland for late next month.',
-      'Local network executives hint at an unprecedented celebrity casting lineup to maximize domestic ratings.',
-      'The broadcast deal secures a prime-time slot alongside concurrent streaming drops on local platforms.'
-    ],
-    source: 'NZ Herald',
-    sourceUrl: 'https://www.nzherald.co.nz'
-  },
-  {
-    id: 'en2',
-    category: 'Entertainment',
-    subCategory: 'Music Production',
-    time: '34m ago',
-    title: 'Global Pop Icon Unveils Secret Conceptual Studio Album Drop',
-    imageUrl: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&auto=format&fit=crop',
-    points: [
-      'The experimental multi-genre collection breaks top daily streaming records within two hours of launch.',
-      'Collaborations feature iconic classical instrumentation paired with modern electronic bass tracks.',
-      'World stadium tour ticket distributions are projected to rollout via major apps tomorrow.'
-    ],
-    source: 'Rolling Stone',
-    sourceUrl: 'https://www.rollingstone.com'
-  },
-  {
-    id: 'w1',
-    category: 'World',
-    subCategory: 'Space Exploration',
-    time: '1h ago',
-    title: 'Deep Space Mission Transmits Historic Atmospheric Data From Outer System',
-    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop',
-    points: [
-      'The automated deep-space probe successfully clears complex outer planetary ring layers.',
-      'Telemetry verifies high concentrations of methane ice structures inside distant cloud ceilings.',
-      'Global aerospace networks hail the breakthrough dataset as a vital pillar for next-generation propulsion models.'
-    ],
-    source: 'Reuters',
-    sourceUrl: 'https://www.reuters.com'
-  },
-  {
-    id: 'w2',
-    category: 'World',
-    subCategory: 'Global Trade Infrastructure',
-    time: '3h ago',
-    title: 'International Maritime Canals Implement Smart Fleet Routing Automation',
-    imageUrl: 'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=800&auto=format&fit=crop',
-    points: [
-      'Major global trade checkpoints deploy real-time digital scheduling algorithms to avoid container delays.',
-      'Supply chain analysts project transit efficiency windows to improve significantly across oceanic routes.',
-      'Fuel resource pricing models react favorably as shipping bottleneck configurations drop globally.'
-    ],
-    source: 'Bloomberg',
-    sourceUrl: 'https://www.bloomberg.com'
-  },
-  {
-    id: 'b1',
-    category: 'Business',
-    subCategory: 'Retail & Economy',
-    time: '1h ago',
-    title: 'Domestic Fuel Pricing Trends Reflect Shifts Across Local Terminals',
-    imageUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&auto=format&fit=crop',
-    points: [
-      'Regional price variations stabilize slightly as localized competition patterns adjust.',
-      'Industry analysts track ongoing supply chain optimization strategies within national reserves.',
-      'Consumer advocacy groups recommend utilizing tracking apps to target optimal refueling windows.'
-    ],
-    source: 'Interest.co.nz',
-    sourceUrl: 'https://www.interest.co.nz'
-  }
-];
+const categories = ['All', 'Concerts', 'Sporting Events', 'Movies', 'Places to Dine', 'Other'];
 
-const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World'];
-
-// Self-Healing Image Component to intercept placeholders and network timeouts
 function SafeFeedImage({ src, alt }) {
   const [imgSrc, setImgSrc] = useState(src);
   const [isFallback, setIsFallback] = useState(false);
 
   const handleError = () => {
     if (!isFallback) {
-      // Switch immediately to a bulletproof, high-quality backup stream if Unsplash throttles or blocks requests
       setImgSrc('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop');
       setIsFallback(true);
     }
@@ -231,28 +153,62 @@ function SafeFeedImage({ src, alt }) {
   );
 }
 
+// Internal timestamp conversion engine to secure accurate calendar sorting sorting calculations
+const parseFeedDate = (dateStr) => {
+  if (!dateStr || dateStr.includes('Now') || dateStr.includes('Rated') || dateStr.includes('Favorite')) {
+    return new Date(8640000000000000); // Send dynamic items without fixed calendar slots to the absolute bottom of the pile
+  }
+  const parts = dateStr.split(' ');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+    const month = months[parts[1]] || 0;
+    const year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+  }
+  return new Date(0);
+};
+
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [feedItems, setFeedItems] = useState([...initialEvents, ...initialPackets]);
 
-  const filteredItems = activeCategory === 'All'
-    ? feedItems
-    : feedItems.filter(item => item.category === activeCategory);
+  // Dynamic sorting router engine
+  const getSortedItems = () => {
+    if (activeCategory === 'Places to Dine') {
+      return initialFeedItems.filter(item => item.category === 'Places to Dine');
+    }
+
+    if (activeCategory !== 'All') {
+      return initialFeedItems
+        .filter(item => item.category === activeCategory)
+        .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
+    }
+
+    // Tab is set to 'All': Chronological items sort up top, dining elements rest comfortably below
+    const timedItems = initialFeedItems
+      .filter(item => item.category !== 'Places to Dine')
+      .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
+
+    const diningItems = initialFeedItems.filter(item => item.category === 'Places to Dine');
+
+    return [...timedItems, ...diningItems];
+  };
+
+  const filteredItems = getSortedItems();
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+    // Refresh gives visual feedback without disrupting system order structures
     setTimeout(() => {
-      const shuffled = [...feedItems].sort(() => Math.random() - 0.5);
-      setFeedItems(shuffled);
       setIsRefreshing(false);
-    }, 600);
+    }, 400);
   };
 
   const handleLinkNavigation = (e, item) => {
     e.preventDefault();
     if (!item.sourceUrl || item.sourceUrl === '#') {
-      const query = encodeURIComponent(`${item.title} News`);
+      const query = encodeURIComponent(`${item.title} New Zealand`);
       window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noopener,noreferrer');
     } else {
       window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
@@ -301,13 +257,13 @@ export function App() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Category Filter Pills */}
+        {/* Navigation Filters */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
                 activeCategory === cat ? 'bg-white text-black border-white' : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:border-neutral-700'
               }`}
             >
@@ -316,29 +272,31 @@ export function App() {
           ))}
         </div>
 
-        {/* Dynamic List Stream */}
+        {/* Chronological Event Feed Stream */}
         <div className="space-y-4">
           {filteredItems.map((item) => {
+            const isDining = item.category === 'Places to Dine';
             return (
               <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl">
                 <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
                   <div className="flex items-center gap-1.5">
                     <span className={`px-2 py-0.5 rounded border text-xs font-bold ${
-                      item.category === 'Events' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-neutral-800 text-neutral-300 border-neutral-700/50'
+                      isDining 
+                        ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' 
+                        : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
                     }`}>
                       {item.category}
                     </span>
                     <span>→</span>
                     <span className="text-neutral-400">{item.subCategory}</span>
                   </div>
-                  <span className={item.category === 'Events' ? 'text-amber-500 font-bold' : ''}>{item.time}</span>
+                  <span className="text-amber-500 font-bold">{item.time}</span>
                 </div>
 
                 <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
                   {item.title}
                 </h2>
 
-                {/* 🛡️ Safe Image Render Component */}
                 {item.imageUrl && <SafeFeedImage src={item.imageUrl} alt={item.title} />}
 
                 <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
@@ -347,13 +305,13 @@ export function App() {
                   ))}
                 </ul>
 
-                <div className="pt-3 border-t border-neutral-800/60 flex items-center text-xs text-neutral-500">
+                <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
                   <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
                   <button 
                     onClick={(e) => handleLinkNavigation(e, item)}
-                    className="ml-3 text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
+                    className="text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
                   >
-                    {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
+                    {isDining ? 'View Menu ↗' : 'Book Tickets ↗'}
                   </button>
                 </div>
               </article>
