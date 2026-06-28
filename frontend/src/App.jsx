@@ -1,133 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-
-// Hardened "What's Coming Up" Data Model with varied dates for sorting verification
-const initialFeedItems = [
-  {
-    id: 'c1',
-    category: 'Concerts',
-    subCategory: 'Stadium Gigs',
-    time: '04 Aug 2026', // August 4
-    title: 'The Neighbourhood: Live at Spark Arena',
-    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland | Spark Arena.',
-      'Massive global indie-rock headliners arrive in New Zealand for their highly anticipated world tour.',
-      'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz'
-  },
-  {
-    id: 'm1',
-    category: 'Movies',
-    subCategory: 'Cinema Blockbusters',
-    time: '09 Aug 2026', // August 9
-    title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
-    imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Hoyts & Event Cinemas (Auckland, Wellington, Christchurch).',
-      'The highly anticipated silver-screen seasonal headliner lands across all major commercial theater circuits.',
-      'Advance family and premium lounge ticket booking tiers open this week.'
-    ],
-    source: 'Event Cinemas',
-    sourceUrl: 'https://www.eventcinemas.co.nz'
-  },
-  {
-    id: 'c2',
-    category: 'Concerts',
-    subCategory: 'Winter Music Festivals',
-    time: '11 Aug 2026', // August 11
-    title: 'Luude: Australasian Winter Tour Direct Hits',
-    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Wellington (Shed 6) & Auckland (Shed 10 dates).',
-      'The chart-topping electronic producer brings high-energy festival-tier sets directly to major regional venues.',
-      'Strictly limited door sales available alongside general admission passes.'
-    ],
-    source: 'Live Nation NZ',
-    sourceUrl: 'https://www.livenation.co.nz'
-  },
-  {
-    id: 's1',
-    category: 'Sporting Events',
-    subCategory: 'International Football',
-    time: '26 Aug 2026', // August 26
-    title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland | Eden Park.',
-      'English Premier League giants travel to local shores to take on Auckland FC in a massive stadium spectacle.',
-      'Part of the International Football Festival; expect an absolute packed house.'
-    ],
-    source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz'
-  },
-  {
-    id: 'o1',
-    category: 'Other',
-    subCategory: 'Live Theatre & Musicals',
-    time: '22 Oct 2026', // October 22 (Furthest out date)
-    title: 'Wicked The Musical: Star-Studded Civic Run',
-    imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland | The Civic Theatre.',
-      'The legendary Broadway production lands in Auckland for a strictly limited four-week regional season.',
-      'Corporate hospitality suites and weekend matinee allocations opening to the public early.'
-    ],
-    source: 'Auckland Live',
-    sourceUrl: 'https://www.aucklandlive.co.nz'
-  },
-
-  // PLACES TO DINE (No concrete event dates, stays pinned beautifully below chronological timelines)
-  {
-    id: 'd1',
-    category: 'Places to Dine',
-    subCategory: 'Auckland Culinary Hotspots',
-    time: 'Trending Now',
-    title: 'Origine: Modern French Bistro Elegance in Commercial Bay',
-    imageUrl: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland CBD | Commercial Bay.',
-      'A stunning Parisian-style glasshouse dining room serving classic French techniques with premium New Zealand seafood and meats.',
-      'Highly recommended: The fresh structural seafood platters and their tailored gin cocktail pairings.'
-    ],
-    source: 'Viva Magazine',
-    sourceUrl: 'https://www.viva.co.nz'
-  },
-  {
-    id: 'd2',
-    category: 'Places to Dine',
-    subCategory: 'Christchurch Eateries',
-    time: 'Highly Rated',
-    title: 'Inati: Elegant Neo-Classic Chef\'s Table Experience',
-    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Christchurch | Hereford Street.',
-      'Sit directly at the theater-style brass counter to watch chefs construct award-winning, innovative South Island plates.',
-      'Securing reservations 2-3 weeks in advance is highly recommended for weekend dinner sittings.'
-    ],
-    source: 'Cuisine Magazine',
-    sourceUrl: 'https://www.cuisine.co.nz'
-  },
-  {
-    id: 'd3',
-    category: 'Places to Dine',
-    subCategory: 'Wellington Bistro',
-    time: 'Local Favorite',
-    title: 'Loretta: Artisanal Seasonal Inner-City Dining',
-    imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Wellington | Cuba Street.',
-      'An airy, rustic-industrial space focused on wood-fired specialty grains, charcuterie, and rotating organic vegetable highlights.',
-      'Perfect choice for casual brunch clusters or ambient low-lit evening group dinner arrangements.'
-    ],
-    source: 'Denizen',
-    sourceUrl: 'https://www.thedenizen.co.nz'
-  }
-];
-
-const categories = ['All', 'Concerts', 'Sporting Events', 'Movies', 'Places to Dine', 'Other'];
+import { initialFeedItems, categories, parseFeedDate } from './data';
 
 function SafeFeedImage({ src, alt }) {
   const [imgSrc, setImgSrc] = useState(src);
@@ -153,27 +26,10 @@ function SafeFeedImage({ src, alt }) {
   );
 }
 
-// Internal timestamp conversion engine to secure accurate calendar sorting sorting calculations
-const parseFeedDate = (dateStr) => {
-  if (!dateStr || dateStr.includes('Now') || dateStr.includes('Rated') || dateStr.includes('Favorite')) {
-    return new Date(8640000000000000); // Send dynamic items without fixed calendar slots to the absolute bottom of the pile
-  }
-  const parts = dateStr.split(' ');
-  if (parts.length === 3) {
-    const day = parseInt(parts[0], 10);
-    const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
-    const month = months[parts[1]] || 0;
-    const year = parseInt(parts[2], 10);
-    return new Date(year, month, day);
-  }
-  return new Date(0);
-};
-
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Dynamic sorting router engine
   const getSortedItems = () => {
     if (activeCategory === 'Places to Dine') {
       return initialFeedItems.filter(item => item.category === 'Places to Dine');
@@ -185,7 +41,7 @@ export function App() {
         .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
     }
 
-    // Tab is set to 'All': Chronological items sort up top, dining elements rest comfortably below
+    // "All" tab view pipeline split logic
     const timedItems = initialFeedItems
       .filter(item => item.category !== 'Places to Dine')
       .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
@@ -197,21 +53,9 @@ export function App() {
 
   const filteredItems = getSortedItems();
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    // Refresh gives visual feedback without disrupting system order structures
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, 400);
-  };
-
-  const handleLinkNavigation = (e, item) => {
-    e.preventDefault();
-    if (!item.sourceUrl || item.sourceUrl === '#') {
-      const query = encodeURIComponent(`${item.title} New Zealand`);
-      window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noopener,noreferrer');
-    } else {
-      window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
+  const handleLinkNavigation = (url) => {
+    if (url && url !== '#') {
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -228,6 +72,7 @@ export function App() {
           </div>
           
           <div className="flex items-center gap-2.5">
+            {/* New Zealand Flag Badge */}
             <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
               <rect width="600" height="300" fill="#00247d"/>
               <g transform="scale(0.5)">
@@ -246,8 +91,11 @@ export function App() {
             </svg>
 
             <button 
-              onClick={handleRefresh}
               disabled={isRefreshing}
+              onClick={() => {
+                setIsRefreshing(true);
+                setTimeout(() => setIsRefreshing(false), 300);
+              }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all"
             >
               <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
@@ -306,10 +154,10 @@ export function App() {
                 </ul>
 
                 <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
-                  <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
+                  <span>Source: <span className="font-semibold text-neutral-400">{item.source}</span></span>
                   <button 
-                    onClick={(e) => handleLinkNavigation(e, item)}
-                    className="text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
+                    onClick={() => handleLinkNavigation(item.sourceUrl)}
+                    className="text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0 text-xs tracking-wide"
                   >
                     {isDining ? 'View Menu ↗' : 'Book Tickets ↗'}
                   </button>
