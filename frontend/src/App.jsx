@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Helper function to dynamically calculate upcoming months relative to current date
 const getDynamicDateLabel = (baseDay, monthsAhead) => {
   const d = new Date();
   d.setMonth(d.getMonth() + monthsAhead);
@@ -9,7 +8,7 @@ const getDynamicDateLabel = (baseDay, monthsAhead) => {
   return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 };
 
-// Expanded Mass-Market Events Grid with working platform links
+// Seeded data objects with unique starting flames/lights counts
 const initialEvents = [
   {
     id: 'e1',
@@ -23,7 +22,8 @@ const initialEvents = [
       'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
     ],
     source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz'
+    sourceUrl: 'https://www.ticketmaster.co.nz',
+    initialFlames: 512
   },
   {
     id: 'e2',
@@ -37,7 +37,8 @@ const initialEvents = [
       'Advance family and premium lounge ticket booking tiers open this week.'
     ],
     source: 'Event Cinemas',
-    sourceUrl: 'https://www.eventcinemas.co.nz'
+    sourceUrl: 'https://www.eventcinemas.co.nz',
+    initialFlames: 341
   },
   {
     id: 'e3',
@@ -51,7 +52,8 @@ const initialEvents = [
       'Strictly limited door sales available alongside general admission passes.'
     ],
     source: 'Live Nation NZ',
-    sourceUrl: 'https://www.livenation.co.nz'
+    sourceUrl: 'https://www.livenation.co.nz',
+    initialFlames: 689
   },
   {
     id: 'e4',
@@ -65,84 +67,14 @@ const initialEvents = [
       'Part of the International Football Festival; expect an absolute packed house.'
     ],
     source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz'
-  },
-  {
-    id: 'e5',
-    category: 'Events',
-    subCategory: 'Major Sports Showcase',
-    time: getDynamicDateLabel(8, 2), 
-    title: 'Chelsea FC Women vs Auckland FC Women Historic Match',
-    points: [
-      'Location: Auckland | Eden Park.',
-      'Women’s Super League champions Chelsea FC face New Zealand’s newest squad in an elite international showcase.',
-      'Doubleheader configurations and hospitality packages open to mass-market public booking pipelines.'
-    ],
-    source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz'
-  },
-  {
-    id: 'e6',
-    category: 'Events',
-    subCategory: 'Concerts & Gigs',
-    time: getDynamicDateLabel(12, 2),
-    title: 'Laufey: A Matter of Time Tour NZ Debut',
-    points: [
-      'Location: Auckland | Spark Arena.',
-      'The Grammy-winning vocal sensation brings her highly anticipated debut arena production to Kiwi fans.',
-      'Final ticket allocations re-released following unprecedented early registration demand.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz'
-  },
-  {
-    id: 'e7',
-    category: 'Events',
-    subCategory: 'Live Theatre & Musicals',
-    time: getDynamicDateLabel(18, 1),
-    title: 'The Book of Mormon – Limited Regional Run',
-    points: [
-      'Location: Wellington | St James Theatre.',
-      'The Broadway smash-hit musical returns to New Zealand for an exclusive, highly energetic short season.',
-      'Massive appeal for local theatergoers; weekend evening shows tracking near capacity.'
-    ],
-    source: 'Ticketek New Zealand',
-    sourceUrl: 'https://www.ticketek.co.nz'
-  },
-  {
-    id: 'e8',
-    category: 'Events',
-    subCategory: 'Community Festivals',
-    time: getDynamicDateLabel(22, 2),
-    title: 'Beervana 2026 National Craft Showcase',
-    points: [
-      'Location: Wellington | Sky Stadium.',
-      'New Zealand’s premier culinary and brewing festival locks in over 60 independent regional hubs.',
-      'Standard entry tickets include commemorative tasting kits and access to live music stages.'
-    ],
-    source: 'Sky Stadium',
-    sourceUrl: 'https://www.skystadium.co.nz'
-  },
-  {
-    id: 'e9',
-    category: 'Events',
-    subCategory: 'Family & Exhibition',
-    time: getDynamicDateLabel(29, 1),
-    title: 'The Great Christchurch Brick Show 2026',
-    points: [
-      'Location: Christchurch | Wolfbrook Arena.',
-      'The largest LEGO display in the South Island returns, featuring custom builds from over 200 global exhibitors.',
-      'A massive weekend drawcard for families and casual collectors alike.'
-    ],
-    source: 'Wolfbrook Arena',
-    sourceUrl: 'https://www.wolfbrookarena.co.nz'
+    sourceUrl: 'https://edenpark.co.nz',
+    initialFlames: 1204
   }
 ];
 
-// Expanded Hyper-Relevant New Zealand News & Lifestyle Feed
 const initialPackets = [
   {
-    id: 1,
+    id: 'p1',
     category: 'Entertainment',
     subCategory: 'Streaming & Media',
     time: 'Just Now',
@@ -153,10 +85,11 @@ const initialPackets = [
       'The broadcast deal secures a prime-time slot alongside concurrent streaming drops on local platforms.'
     ],
     source: 'NZ Herald',
-    sourceUrl: 'https://www.nzherald.co.nz'
+    sourceUrl: 'https://www.nzherald.co.nz',
+    initialFlames: 845
   },
   {
-    id: 2,
+    id: 'p2',
     category: 'Sports',
     subCategory: 'Rugby Union',
     time: '12m ago',
@@ -167,10 +100,11 @@ const initialPackets = [
       'Ticket sales across major regional stadiums see a rapid surge as match-day security parameters are finalized.'
     ],
     source: 'Stuff.co.nz',
-    sourceUrl: 'https://www.stuff.co.nz'
+    sourceUrl: 'https://www.stuff.co.nz',
+    initialFlames: 1440
   },
   {
-    id: 3,
+    id: 'p3',
     category: 'Entertainment',
     subCategory: 'Music & Events',
     time: '34m ago',
@@ -181,103 +115,73 @@ const initialPackets = [
       'Organizers introduce enhanced logistics partnerships to streamline transit routes to festival grounds.'
     ],
     source: 'UnderTheRadar',
-    sourceUrl: 'https://www.undertheradar.co.nz'
-  },
-  {
-    id: 4,
-    category: 'Business',
-    subCategory: 'Retail & Economy',
-    time: '1h ago',
-    title: 'Domestic Fuel Pricing Trends Reflect Shifts Across Local Terminals',
-    points: [
-      'Regional price variations stabilize slightly as localized competition patterns adjust.',
-      'Industry analysts track ongoing supply chain optimization strategies within national reserves.',
-      'Consumer advocacy groups recommend utilizing tracking apps to target optimal refueling windows.'
-    ],
-    source: 'Interest.co.nz',
-    sourceUrl: 'https://www.interest.co.nz'
-  },
-  {
-    id: 5,
-    category: 'World',
-    subCategory: 'Pacific Aviation',
-    time: '2h ago',
-    title: 'Trans-Tasman Airline Routes Expand Fleet Capacities for Peak Travel',
-    points: [
-      'Carriers deploy larger wide-body aircraft to accommodate high-volume commuter corridors.',
-      'Competitive airfare pricing frameworks introduced for early booking allocations.',
-      'Airport hubs scale up frontline self-service customs kiosks to accelerate passenger processing.'
-    ],
-    source: 'Radio New Zealand',
-    sourceUrl: 'https://www.rnz.co.nz'
-  },
-  {
-    id: 6,
-    category: 'Technology',
-    subCategory: 'Digital Infrastructure',
-    time: '3h ago',
-    title: 'Hyper-Scale Cloud Data Center officially Powers Up Infrastructure Hub',
-    points: [
-      'The multi-million dollar local facility goes live to support enterprise-grade digital services.',
-      'Architecture features localized backup arrays to maximize up-time against regional interruptions.',
-      'Tech sectors forecast expanded operational capacities for local software development pipelines.'
-    ],
-    source: 'NBR',
-    sourceUrl: 'https://www.nbr.co.nz'
-  },
-  {
-    id: 7,
-    category: 'Politics',
-    subCategory: 'Local Government',
-    time: '4h ago',
-    title: 'Regional Council Outlines Infrastructure Financing Frameworks',
-    points: [
-      'Capital allocation priorities focus on long-term roading resilience and public facility upgrades.',
-      'Community consultation periods open to gather feedback on proposed rate adjustments.',
-      'Collaborative funding partnerships with national transport agencies formalised for key corridors.'
-    ],
-    source: 'The Spinoff',
-    sourceUrl: 'https://thespinoff.co.nz'
+    sourceUrl: 'https://www.undertheradar.co.nz',
+    initialFlames: 412
   }
 ];
 
-const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World', 'Technology', 'Politics'];
+const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World'];
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [packets, setPackets] = useState(initialPackets);
-  const [events, setEvents] = useState(initialEvents);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Track system interactions in local states dynamically
+  const [flameCounts, setFlameCounts] = useState(() => {
+    const registry = {};
+    initialEvents.forEach(e => registry[e.id] = { count: e.initialFlames, clicked: false });
+    initialPackets.forEach(p => registry[p.id] = { count: p.initialFlames, clicked: false });
+    return registry;
+  });
 
-  const displayItems = activeCategory === 'All'
-    ? [...events, ...packets]
-    : activeCategory === 'Events'
-      ? events
-      : packets.filter(p => p.category === activeCategory);
+  const [feedItems, setFeedItems] = useState([...initialEvents, ...initialPackets]);
+
+  const filteredItems = activeCategory === 'All'
+    ? feedItems
+    : feedItems.filter(item => item.category === activeCategory);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
-      const shuffledPackets = [...packets].sort(() => Math.random() - 0.5);
-      const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
-      setPackets(shuffledPackets);
-      setEvents(shuffledEvents);
+      const shuffled = [...feedItems].sort(() => Math.random() - 0.5);
+      setFeedItems(shuffled);
       setIsRefreshing(false);
     }, 600);
   };
 
-  // Safe external navigation utility with automated query fallback
+  // Upgrades total counter instantly with smooth UI feedback hooks
+  const handleFlameUp = (id) => {
+    setFlameCounts(prev => {
+      const current = prev[id];
+      if (current.clicked) return prev; // limit to one light up click per session
+      return {
+        ...prev,
+        [id]: { count: current.count + 1, clicked: true }
+      };
+    });
+  };
+
   const handleLinkNavigation = (e, item) => {
     e.preventDefault();
-    
-    // If the url is just a placeholder or blank, generate a smart fallback search query URL
     if (!item.sourceUrl || item.sourceUrl === '#') {
-      const query = encodeURIComponent(`${item.title} New Zealand tickets`);
+      const query = encodeURIComponent(`${item.title} New Zealand`);
       window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noopener,noreferrer');
     } else {
-      // Open the verified landing page cleanly in an isolated tab context
       window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
     }
+  };
+
+  // Formats context parameters dynamically and opens direct Facebook publishing dashboard
+  const handlePinToFacebook = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Fallback share deployment points to live deployment parameters or primary domains
+    const currentSiteUrl = window.location.href;
+    const customShareText = `Check out this hot update in NZ: "${item.title}" via WOTS-HOT!`;
+    
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentSiteUrl)}&quote=${encodeURIComponent(customShareText)}`;
+    window.open(facebookShareUrl, '_blank', 'noopener,noreferrer,width=600,height=400');
   };
 
   return (
@@ -294,12 +198,7 @@ export function App() {
           
           <div className="flex items-center gap-3">
             {/* Full-Color New Zealand Flag */}
-            <svg 
-              className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" 
-              viewBox="0 0 600 300" 
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="New Zealand Flag"
-            >
+            <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
               <rect width="600" height="300" fill="#00247d"/>
               <g transform="scale(0.5)">
                 <path d="M0,0 L600,300 M0,300 L600,0 M300,0 L300,300 M0,150 L600,150" stroke="#fff" strokeWidth="60"/>
@@ -314,20 +213,12 @@ export function App() {
                 <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
                 <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
               </g>
-              <g transform="translate(390, 140) scale(0.5)">
-                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
-                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
-              </g>
-              <g transform="translate(505, 125) scale(0.55)">
-                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
-                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
-              </g>
             </svg>
 
             <button 
               onClick={handleRefresh}
               disabled={isRefreshing}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all"
             >
               <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
               {isRefreshing ? 'Updating...' : 'Refresh'}
@@ -349,10 +240,8 @@ export function App() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border snap-start ${
-                activeCategory === cat
-                  ? 'bg-white text-black border-white'
-                  : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:border-neutral-700'
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                activeCategory === cat ? 'bg-white text-black border-white' : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:border-neutral-700'
               }`}
             >
               {cat}
@@ -360,59 +249,81 @@ export function App() {
           ))}
         </div>
 
-        {/* Dynamic Display Feed */}
+        {/* Intelligence Feed List */}
         <div className="space-y-4">
-          {displayItems.length === 0 ? (
-            <div className="p-8 text-center rounded-xl border border-neutral-800 bg-neutral-900/20 text-neutral-500 text-sm">
-              No recent entries found in this selection.
-            </div>
-          ) : (
-            displayItems.map((item) => (
-              <article 
-                key={item.id} 
-                className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl"
-              >
-                <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
+          {filteredItems.map((item) => {
+            const hasUserClicked = flameCounts[item.id]?.clicked;
+            const liveTotalFlames = flameCounts[item.id]?.count || 0;
+
+            return (
+              <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl relative group">
+                
+                {/* Top Right Header Actions Container */}
+                <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                  <button
+                    onClick={(e) => handlePinToFacebook(e, item)}
+                    title="Pin to Facebook Feed"
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 text-blue-400 hover:text-white transition-all text-xs shadow-md active:scale-90"
+                  >
+                    🔵
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500 pr-10">
                   <div className="flex items-center gap-1.5">
                     <span className={`px-2 py-0.5 rounded border text-xs font-bold ${
-                      item.category === 'Events' 
-                        ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' 
-                        : 'bg-neutral-800 text-neutral-300 border-neutral-700/50'
+                      item.category === 'Events' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-neutral-800 text-neutral-300 border-neutral-700/50'
                     }`}>
                       {item.category}
                     </span>
                     <span>→</span>
                     <span className="text-neutral-400">{item.subCategory}</span>
                   </div>
-                  <span className={item.category === 'Events' ? 'text-amber-500 font-bold' : ''}>
-                    {item.time}
-                  </span>
+                  <span className={item.category === 'Events' ? 'text-amber-500 font-bold' : ''}>{item.time}</span>
                 </div>
 
-                <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
+                <h2 className="text-lg font-bold text-white leading-snug tracking-tight pr-6">
                   {item.title}
                 </h2>
 
                 <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
                   {item.points.map((point, idx) => (
-                    <li key={idx} className="leading-relaxed pl-1">
-                      {point}
-                    </li>
+                    <li key={idx} className="leading-relaxed pl-1">{point}</li>
                   ))}
                 </ul>
 
-                <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
-                  <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
-                  <button 
-                    onClick={(e) => handleLinkNavigation(e, item)}
-                    className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
+                {/* Bottom Bar: Sourcing Actions and interactive engagement buttons */}
+                <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
+                  <div>
+                    <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
+                    <button 
+                      onClick={(e) => handleLinkNavigation(e, item)}
+                      className="ml-3 text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0"
+                    >
+                      {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
+                    </button>
+                  </div>
+
+                  {/* Mass Market Engagement Fire Component */}
+                  <button
+                    onClick={() => handleFlameUp(item.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-extrabold tracking-tight select-none transition-all duration-200 transform active:scale-95 ${
+                      hasUserClicked 
+                        ? 'bg-orange-500/20 border-orange-500 text-orange-400 shadow-lg shadow-orange-500/10 scale-105' 
+                        : 'bg-neutral-900 border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white'
+                    }`}
                   >
-                    {item.category === 'Events' ? 'Book Tickets ↗' : 'Source ↗'}
+                    <span>{hasUserClicked ? '🔥 Lit!' : '🔥 Light It Up'}</span>
+                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${
+                      hasUserClicked ? 'bg-orange-500 text-black' : 'bg-neutral-800 text-neutral-400 group-hover:text-neutral-200'
+                    }`}>
+                      {liveTotalFlames.toLocaleString()}
+                    </span>
                   </button>
                 </div>
               </article>
-            ))
-          )}
+            );
+          })}
         </div>
       </main>
     </div>
