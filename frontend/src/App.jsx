@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Comprehensive Global Data Model with Image Integration
+// Hardened, production-grade assets (Using bulletproof CDN links)
 const initialEvents = [
   {
     id: 'e1',
@@ -9,7 +9,7 @@ const initialEvents = [
     subCategory: 'Concerts & Stadium Gigs',
     time: '04 Aug 2026', 
     title: 'The Neighbourhood: Live at Spark Arena',
-    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop',
     points: [
       'Location: Auckland | Spark Arena.',
       'Massive global indie-rock headliners arrive in New Zealand for their highly anticipated world tour.',
@@ -24,7 +24,7 @@ const initialEvents = [
     subCategory: 'Cinema Blockbusters',
     time: '09 Aug 2026', 
     title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
-    imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop',
     points: [
       'Location: Hoyts & Event Cinemas (Auckland, Wellington, Christchurch).',
       'The highly anticipated silver-screen seasonal headliner lands across all major commercial theater circuits.',
@@ -39,7 +39,7 @@ const initialEvents = [
     subCategory: 'Live Music Festivals',
     time: '11 Aug 2026',
     title: 'Luude: Australasian Winter Tour Direct Hits',
-    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop',
     points: [
       'Location: Wellington (Shed 6) & Auckland (Shed 10 dates).',
       'The chart-topping electronic producer brings high-energy festival-tier sets directly to major regional venues.',
@@ -54,7 +54,7 @@ const initialEvents = [
     subCategory: 'International Football',
     time: '26 Aug 2026',
     title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop',
     points: [
       'Location: Auckland | Eden Park.',
       'English Premier League giants travel to local shores to take on Auckland FC in a massive stadium spectacle.',
@@ -69,7 +69,7 @@ const initialEvents = [
     subCategory: 'Live Theatre & Musicals',
     time: '22 Oct 2026',
     title: 'Wicked The Musical: Star-Studded Civic Run',
-    imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&auto=format&fit=crop',
     points: [
       'Location: Auckland | The Civic Theatre.',
       'The legendary Broadway production lands in Auckland for a strictly limited four-week regional season.',
@@ -81,14 +81,13 @@ const initialEvents = [
 ];
 
 const initialPackets = [
-  // GLOBAL SPORTS
   {
     id: 's1',
     category: 'Sports',
     subCategory: 'Basketball - NBA',
     time: '5m ago',
     title: 'NBA Finals: Underdog Franchise Clinches Championship Title in Game 7 Thriller',
-    imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&auto=format&fit=crop',
     points: [
       'A thrilling buzzer-beater shot in the final seconds seals a historic comeback victory to claim the trophy.',
       'The finals MVP breaks tournament records for the highest total point contribution in a closing series.',
@@ -103,7 +102,7 @@ const initialPackets = [
     subCategory: 'Tennis - Grand Slam',
     time: '12m ago',
     title: 'Wimbledon: Top Seed Overcomes Injury to Secure Grand Slam Title',
-    imageUrl: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=800&auto=format&fit=crop',
     points: [
       'The multi-hour baseline duel ends in an absolute classic five-set tiebreaker on Center Court.',
       'Medical staff cleared minor knee strains during an intense third-set tactical intermission.',
@@ -118,7 +117,7 @@ const initialPackets = [
     subCategory: 'Football - UEFA',
     time: '45m ago',
     title: 'Champions League: Tactical Masterclass Books Spot in European Grand Final',
-    imageUrl: 'https://images.unsplash.com/photo-1518091043644-c1d445bccb59?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1518091043644-c1d445bccb59?w=800&auto=format&fit=crop',
     points: [
       'A late second-half counter-attacking structure breaks down a stubborn defensive backline configuration.',
       'Club executives confirm historic broadcast viewership figures across global streaming networks.',
@@ -127,15 +126,13 @@ const initialPackets = [
     source: 'Sky Sports',
     sourceUrl: 'https://www.skysports.com'
   },
-
-  // ENTERTAINMENT
   {
     id: 'en1',
     category: 'Entertainment',
     subCategory: 'Streaming & Media',
     time: 'Just Now',
     title: 'Major International Reality Franchise Confirms Upcoming New Zealand Season',
-    imageUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&auto=format&fit=crop',
     points: [
       'Production crews slate location scouting across Queenstown and Auckland for late next month.',
       'Local network executives hint at an unprecedented celebrity casting lineup to maximize domestic ratings.',
@@ -150,7 +147,7 @@ const initialPackets = [
     subCategory: 'Music Production',
     time: '34m ago',
     title: 'Global Pop Icon Unveils Secret Conceptual Studio Album Drop',
-    imageUrl: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&auto=format&fit=crop',
     points: [
       'The experimental multi-genre collection breaks top daily streaming records within two hours of launch.',
       'Collaborations feature iconic classical instrumentation paired with modern electronic bass tracks.',
@@ -159,15 +156,13 @@ const initialPackets = [
     source: 'Rolling Stone',
     sourceUrl: 'https://www.rollingstone.com'
   },
-
-  // GLOBAL WORLD NEWS
   {
     id: 'w1',
     category: 'World',
     subCategory: 'Space Exploration',
     time: '1h ago',
     title: 'Deep Space Mission Transmits Historic Atmospheric Data From Outer System',
-    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop',
     points: [
       'The automated deep-space probe successfully clears complex outer planetary ring layers.',
       'Telemetry verifies high concentrations of methane ice structures inside distant cloud ceilings.',
@@ -182,7 +177,7 @@ const initialPackets = [
     subCategory: 'Global Trade Infrastructure',
     time: '3h ago',
     title: 'International Maritime Canals Implement Smart Fleet Routing Automation',
-    imageUrl: 'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=800&auto=format&fit=crop',
     points: [
       'Major global trade checkpoints deploy real-time digital scheduling algorithms to avoid container delays.',
       'Supply chain analysts project transit efficiency windows to improve significantly across oceanic routes.',
@@ -191,15 +186,13 @@ const initialPackets = [
     source: 'Bloomberg',
     sourceUrl: 'https://www.bloomberg.com'
   },
-
-  // BUSINESS
   {
     id: 'b1',
     category: 'Business',
     subCategory: 'Retail & Economy',
     time: '1h ago',
     title: 'Domestic Fuel Pricing Trends Reflect Shifts Across Local Terminals',
-    imageUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&auto=format&fit=crop',
     points: [
       'Regional price variations stabilize slightly as localized competition patterns adjust.',
       'Industry analysts track ongoing supply chain optimization strategies within national reserves.',
@@ -211,6 +204,32 @@ const initialPackets = [
 ];
 
 const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World'];
+
+// Self-Healing Image Component to intercept placeholders and network timeouts
+function SafeFeedImage({ src, alt }) {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [isFallback, setIsFallback] = useState(false);
+
+  const handleError = () => {
+    if (!isFallback) {
+      // Switch immediately to a bulletproof, high-quality backup stream if Unsplash throttles or blocks requests
+      setImgSrc('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop');
+      setIsFallback(true);
+    }
+  };
+
+  return (
+    <div className="my-3.5 overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-900 relative min-h-[180px] flex items-center justify-center">
+      <img 
+        src={imgSrc} 
+        alt={alt} 
+        onError={handleError}
+        className="w-full h-48 sm:h-56 object-cover opacity-90 hover:opacity-100 transition-opacity duration-200"
+        loading="lazy"
+      />
+    </div>
+  );
+}
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -253,7 +272,6 @@ export function App() {
           </div>
           
           <div className="flex items-center gap-2.5">
-            {/* New Zealand Flag Badge */}
             <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
               <rect width="600" height="300" fill="#00247d"/>
               <g transform="scale(0.5)">
@@ -303,7 +321,6 @@ export function App() {
           {filteredItems.map((item) => {
             return (
               <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl">
-                {/* Meta Header */}
                 <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
                   <div className="flex items-center gap-1.5">
                     <span className={`px-2 py-0.5 rounded border text-xs font-bold ${
@@ -317,31 +334,19 @@ export function App() {
                   <span className={item.category === 'Events' ? 'text-amber-500 font-bold' : ''}>{item.time}</span>
                 </div>
 
-                {/* Story Title */}
                 <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
                   {item.title}
                 </h2>
 
-                {/* 📸 Representative Image Element - Framed right below headline as seen in image.png */}
-                {item.imageUrl && (
-                  <div className="my-3.5 overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-950">
-                    <img 
-                      src={item.imageUrl} 
-                      alt={item.title} 
-                      className="w-full h-48 sm:h-56 object-cover opacity-90 hover:opacity-100 transition-opacity duration-200"
-                      loading="lazy"
-                    />
-                  </div>
-                )}
+                {/* 🛡️ Safe Image Render Component */}
+                {item.imageUrl && <SafeFeedImage src={item.imageUrl} alt={item.title} />}
 
-                {/* Bullet Points */}
                 <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
                   {item.points.map((point, idx) => (
                     <li key={idx} className="leading-relaxed pl-1">{point}</li>
                   ))}
                 </ul>
 
-                {/* Bottom Source Bar */}
                 <div className="pt-3 border-t border-neutral-800/60 flex items-center text-xs text-neutral-500">
                   <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
                   <button 
