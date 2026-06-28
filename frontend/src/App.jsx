@@ -1,7 +1,103 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Hyper-relevant New Zealand & mass-market data feed
+// Helper function to dynamically get upcoming months
+const getDynamicDateLabel = (baseDay, monthsAhead) => {
+  const d = new Date();
+  d.setMonth(d.getMonth() + monthsAhead);
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return `${baseDay} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+};
+
+// Curated mass-market Events that calculate their dates dynamically based on current time
+const initialEvents = [
+  {
+    id: 'e1',
+    category: 'Events',
+    subCategory: 'Concerts & Gigs',
+    time: getDynamicDateLabel(4, 1), // Dynamically outputs 1 month ahead
+    title: 'The Neighbourhood: Live at Spark Arena',
+    points: [
+      'Location: Auckland | Spark Arena.',
+      'Massive global indie-rock headliners land in New Zealand for their highly anticipated world tour.',
+      'Tickets moving fast via mainstream local booking platforms for this prime Saturday night event.'
+    ],
+    source: 'Ticketmaster NZ',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e2',
+    category: 'Events',
+    subCategory: 'Cinema Blockbusters',
+    time: getDynamicDateLabel(9, 1), 
+    title: 'Disney Blockbuster Premieres – Nationwide Commercial Cinematic Releases',
+    points: [
+      'Location: Auckland, Wellington & Christchurch theaters.',
+      'The highly anticipated new silver-screen seasonal headliner lands across all major commercial theater circuits.',
+      'Advance family and premium lounge ticket booking tiers open this week.'
+    ],
+    source: 'Event Cinemas',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e3',
+    category: 'Events',
+    subCategory: 'Live Music',
+    time: getDynamicDateLabel(11, 1),
+    title: 'Luude: Australasian Winter Tour Direct Hits',
+    points: [
+      'Location: Wellington (Shed 6) & Auckland (Shed 10).',
+      'The chart-topping electronic producer brings high-energy festival-tier sets directly to major regional venues.',
+      'Strictly limited door sales available alongside general admission passes.'
+    ],
+    source: 'Live Nation NZ',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e4',
+    category: 'Events',
+    subCategory: 'International Football',
+    time: getDynamicDateLabel(26, 1),
+    title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
+    points: [
+      'Location: Auckland | Eden Park.',
+      'English Premier League giants travel to local shores to take on Auckland FC in a massive stadium spectacle.',
+      'Part of the New Zealand International Football Festival; expect an absolute packed house.'
+    ],
+    source: 'Eden Park Events',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e5',
+    category: 'Events',
+    subCategory: 'Major Sports',
+    time: getDynamicDateLabel(8, 2), // Dynamically outputs 2 months ahead
+    title: 'Chelsea FC Women vs Auckland FC Women Historic Match',
+    points: [
+      'Location: Auckland | Eden Park.',
+      'Women’s Super League champions Chelsea FC face New Zealand’s newest squad in an elite international showcase.',
+      'Doubleheader configurations and hospitality packages open to mass-market public booking pipelines.'
+    ],
+    source: 'Eden Park Events',
+    sourceUrl: '#'
+  },
+  {
+    id: 'e6',
+    category: 'Events',
+    subCategory: 'Concerts & Gigs',
+    time: getDynamicDateLabel(12, 2),
+    title: 'Laufey: A Matter of Time Tour NZ Debut',
+    points: [
+      'Location: Auckland | Spark Arena.',
+      'The Grammy-winning vocal sensation brings her highly anticipated debut arena production to Kiwi fans.',
+      'Final ticket allocations re-released following unprecedented early registration demand.'
+    ],
+    source: 'Heart of the City',
+    sourceUrl: '#'
+  }
+];
+
+// Hyper-relevant New Zealand News Data Feed
 const initialPackets = [
   {
     id: 1,
@@ -72,53 +168,30 @@ const initialPackets = [
     ],
     source: 'Radio New Zealand',
     sourceUrl: '#'
-  },
-  {
-    id: 6,
-    category: 'Technology',
-    subCategory: 'Digital Infrastructure',
-    time: '3h ago',
-    title: 'Hyper-Scale Cloud Data Center officially Powers Up Infrastructure Hub',
-    points: [
-      'The multi-million dollar local facility goes live to support enterprise-grade digital services.',
-      'Architecture features localized backup arrays to maximize up-time against regional interruptions.',
-      'Tech sectors forecast expanded operational capacities for local software development pipelines.'
-    ],
-    source: 'NBR',
-    sourceUrl: '#'
-  },
-  {
-    id: 7,
-    category: 'Politics',
-    subCategory: 'Local Government',
-    time: '4h ago',
-    title: 'Regional Council Outlines Infrastructure Financing Frameworks',
-    points: [
-      'Capital allocation priorities focus on long-term roading resilience and public facility upgrades.',
-      'Community consultation periods open to gather feedback on proposed rate adjustments.',
-      'Collaborative funding partnerships with national transport agencies formalised for key corridors.'
-    ],
-    source: 'The Spinoff',
-    sourceUrl: '#'
   }
 ];
 
-const categories = ['All', 'Entertainment', 'Sports', 'Business', 'World', 'Technology', 'Politics'];
+const categories = ['All', 'Events', 'Entertainment', 'Sports', 'Business', 'World'];
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [packets, setPackets] = useState(initialPackets);
+  const [events, setEvents] = useState(initialEvents);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const filteredPackets = activeCategory === 'All'
-    ? packets
-    : packets.filter(p => p.category === activeCategory);
+  const displayItems = activeCategory === 'All'
+    ? [...events, ...packets]
+    : activeCategory === 'Events'
+      ? events
+      : packets.filter(p => p.category === activeCategory);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
-      const shuffled = [...packets].sort(() => Math.random() - 0.5);
-      setPackets(shuffled);
+      const shuffledPackets = [...packets].sort(() => Math.random() - 0.5);
+      const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
+      setPackets(shuffledPackets);
+      setEvents(shuffledEvents);
       setIsRefreshing(false);
     }, 600);
   };
@@ -135,19 +208,36 @@ export function App() {
             </h1>
           </div>
           
-          <div className="flex items-center gap-4">
-            {/* Minimalist White SVG Map of New Zealand */}
+          <div className="flex items-center gap-3">
+            {/* Full-Color New Zealand Flag */}
             <svg 
-              className="w-7 h-10 text-white fill-current opacity-85" 
-              viewBox="0 0 100 150" 
-              aria-label="New Zealand Map"
+              className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" 
+              viewBox="0 0 600 300" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="New Zealand Flag"
             >
-              {/* North Island */}
-              <path d="M62,12 C58,15 52,22 55,26 C57,29 65,24 67,27 C70,32 55,42 58,47 C60,50 69,42 73,44 C78,46 72,56 68,58 C62,61 54,49 46,51 C40,53 43,60 41,65 C38,72 26,65 24,72 C22,78 30,81 33,86 C36,90 32,96 36,99 C40,102 46,95 49,91 C53,86 59,88 64,83 C68,78 69,67 73,63 C78,57 87,46 84,38 C82,32 73,34 71,28 C70,22 76,17 73,11 C70,6 64,8 62,12 Z" />
-              {/* South Island */}
-              <path d="M21,95 C17,98 12,106 15,111 C18,116 26,114 27,119 C28,125 18,133 22,138 C25,142 35,138 39,141 C43,143 42,148 48,146 C56,143 62,131 60,123 C58,116 48,115 47,108 C46,102 52,95 48,91 C43,87 36,95 31,93 C27,91 24,93 21,95 Z" />
-              {/* Stewart Island */}
-              <path d="M21,143 C20,144 19,147 21,148 C23,149 25,146 25,145 C24,143 22,142 21,143 Z" />
+              <rect width="600" height="300" fill="#00247d"/>
+              <g transform="scale(0.5)">
+                <path d="M0,0 L600,300 M0,300 L600,0 M300,0 L300,300 M0,150 L600,150" stroke="#fff" strokeWidth="60"/>
+                <path d="M0,0 L600,300 M0,300 L600,0" stroke="#cc142b" strokeWidth="40"/>
+                <path d="M300,0 L300,300 M0,150 L600,150" stroke="#cc142b" strokeWidth="40"/>
+              </g>
+              <g transform="translate(450, 240) scale(0.6)">
+                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
+                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
+              </g>
+              <g transform="translate(450, 60) scale(0.6)">
+                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
+                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
+              </g>
+              <g transform="translate(390, 140) scale(0.5)">
+                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
+                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
+              </g>
+              <g transform="translate(505, 125) scale(0.55)">
+                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
+                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
+              </g>
             </svg>
 
             <button 
@@ -186,35 +276,41 @@ export function App() {
           ))}
         </div>
 
-        {/* Intelligence Feed List */}
+        {/* Dynamic Display Feed */}
         <div className="space-y-4">
-          {filteredPackets.length === 0 ? (
+          {displayItems.length === 0 ? (
             <div className="p-8 text-center rounded-xl border border-neutral-800 bg-neutral-900/20 text-neutral-500 text-sm">
-              No updates found in this category.
+              No recent entries found in this selection.
             </div>
           ) : (
-            filteredPackets.map((packet) => (
+            displayItems.map((item) => (
               <article 
-                key={packet.id} 
+                key={item.id} 
                 className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl"
               >
                 <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500">
                   <div className="flex items-center gap-1.5">
-                    <span className="px-2 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-neutral-700/50">
-                      {packet.category}
+                    <span className={`px-2 py-0.5 rounded border text-xs font-bold ${
+                      item.category === 'Events' 
+                        ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' 
+                        : 'bg-neutral-800 text-neutral-300 border-neutral-700/50'
+                    }`}>
+                      {item.category}
                     </span>
                     <span>→</span>
-                    <span className="text-neutral-400">{packet.subCategory}</span>
+                    <span className="text-neutral-400">{item.subCategory}</span>
                   </div>
-                  <span>{packet.time}</span>
+                  <span className={item.category === 'Events' ? 'text-amber-500 font-bold' : ''}>
+                    {item.time}
+                  </span>
                 </div>
 
                 <h2 className="text-lg font-bold text-white leading-snug tracking-tight">
-                  {packet.title}
+                  {item.title}
                 </h2>
 
                 <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
-                  {packet.points.map((point, idx) => (
+                  {item.points.map((point, idx) => (
                     <li key={idx} className="leading-relaxed pl-1">
                       {point}
                     </li>
@@ -222,9 +318,9 @@ export function App() {
                 </ul>
 
                 <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
-                  <span>Via <span className="font-semibold text-neutral-400">{packet.source}</span></span>
-                  <a href={packet.sourceUrl} className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium">
-                    Source ↗
+                  <span>Via <span className="font-semibold text-neutral-400">{item.source}</span></span>
+                  <a href={item.sourceUrl} className="text-amber-500 hover:underline flex items-center gap-0.5 font-medium">
+                    {item.category === 'Events' ? 'Book Tickets ↗' : 'Source 2 ↗'}
                   </a>
                 </div>
               </article>
