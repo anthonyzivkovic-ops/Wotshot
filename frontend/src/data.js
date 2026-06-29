@@ -25,6 +25,7 @@ export const initialFeedItems = [
     category: 'Concerts',
     subCategory: 'Stadium Gigs',
     time: '04 Aug 2026',
+    flames: 142,
     title: 'The Neighbourhood: Live at Spark Arena',
     imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop',
     points: [
@@ -40,6 +41,7 @@ export const initialFeedItems = [
     category: 'Concerts',
     subCategory: 'Winter Music Festivals',
     time: '11 Aug 2026',
+    flames: 89,
     title: 'Luude: Australasian Winter Tour Direct Hits',
     imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop',
     points: [
@@ -55,6 +57,7 @@ export const initialFeedItems = [
     category: 'Concerts',
     subCategory: 'Synth-Pop Solo',
     time: '18 Aug 2026',
+    flames: 215,
     title: 'Fred again..: Surprise Arena Loop Pop-Up',
     imageUrl: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&auto=format&fit=crop',
     points: [
@@ -70,6 +73,7 @@ export const initialFeedItems = [
     category: 'Concerts',
     subCategory: 'Heavy Rock Tour',
     time: '05 Sep 2026',
+    flames: 174,
     title: 'Foo Fighters: Concrete and Gold Revival',
     imageUrl: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&auto=format&fit=crop',
     points: [
@@ -89,6 +93,7 @@ export const initialFeedItems = [
     category: 'Sporting Events',
     subCategory: 'International Football',
     time: '26 Aug 2026',
+    flames: 95,
     title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
     imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop',
     points: [
@@ -104,6 +109,7 @@ export const initialFeedItems = [
     category: 'Sporting Events',
     subCategory: 'Rugby Union Championship',
     time: '12 Sep 2026',
+    flames: 312,
     title: 'All Blacks vs Australia: Bledisloe Cup Decider',
     imageUrl: 'https://images.unsplash.com/photo-1544547611-c54d9626a515?w=800&auto=format&fit=crop',
     points: [
@@ -114,21 +120,6 @@ export const initialFeedItems = [
     source: 'Sky Stadium Box Office',
     sourceUrl: 'https://www.skystadium.co.nz/whats-on/'
   },
-  {
-    id: 's3',
-    category: 'Sporting Events',
-    subCategory: 'Domestic Basketball',
-    time: '19 Sep 2026',
-    title: 'BNZ Breakers vs Sydney Kings: NBL Season Opener',
-    imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Auckland | Spark Arena.',
-      'A premium physical rivalry clash opens up the official regional basketball season pipeline.',
-      'Court-side lounge packages and standard fan seating brackets are accessible via direct links.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz/search?q=Breakers'
-  },
 
   // ==========================================
   // 3. MOVIES
@@ -138,6 +129,7 @@ export const initialFeedItems = [
     category: 'Movies',
     subCategory: 'Cinema Blockbusters',
     time: '09 Aug 2026',
+    flames: 54,
     title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
     imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop',
     points: [
@@ -153,6 +145,7 @@ export const initialFeedItems = [
     category: 'Movies',
     subCategory: 'Independent Film Festival',
     time: '20 Aug 2026',
+    flames: 120,
     title: 'New Zealand International Film Festival: Opening Night Gala',
     imageUrl: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=800&auto=format&fit=crop',
     points: [
@@ -172,6 +165,7 @@ export const initialFeedItems = [
     category: 'Places to Dine',
     subCategory: 'Auckland Culinary Hotspots',
     time: 'Trending Now',
+    flames: 198,
     title: 'Origine: Modern French Bistro Elegance in Commercial Bay',
     imageUrl: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&auto=format&fit=crop',
     points: [
@@ -187,6 +181,7 @@ export const initialFeedItems = [
     category: 'Places to Dine',
     subCategory: 'Christchurch Eateries',
     time: 'Highly Rated',
+    flames: 165,
     title: 'Inati: Elegant Neo-Classic Chef\'s Table Experience',
     imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop',
     points: [
@@ -202,6 +197,7 @@ export const initialFeedItems = [
     category: 'Places to Dine',
     subCategory: 'Wellington Bistro',
     time: 'Local Favorite',
+    flames: 112,
     title: 'Loretta: Artisanal Seasonal Inner-City Dining',
     imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop',
     points: [
@@ -212,21 +208,6 @@ export const initialFeedItems = [
     source: 'Loretta Cuba St',
     sourceUrl: 'https://www.loretta.net.nz/'
   },
-  {
-    id: 'd4',
-    category: 'Places to Dine',
-    subCategory: 'Christchurch Fusion',
-    time: 'New Entry',
-    title: 'King of Snake: Sophisticated Southeast Asian Fine Dining',
-    imageUrl: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&auto=format&fit=crop',
-    points: [
-      'Location: Christchurch | Oxford Terrace Strip.',
-      'Immersive, moody design meets boundary-pushing premium Asian execution along the buzzing retail terrace.',
-      'The signature crispy red duck curry and premium local Sauvignon cuts dominate the current seasonal menus.'
-    ],
-    source: 'King of Snake',
-    sourceUrl: 'https://kingofsnake.co.nz/'
-  },
 
   // ==========================================
   // 5. OTHER
@@ -236,6 +217,7 @@ export const initialFeedItems = [
     category: 'Other',
     subCategory: 'Live Theatre & Musicals',
     time: '22 Oct 2026',
+    flames: 287,
     title: 'Wicked The Musical: Star-Studded Civic Run',
     imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&auto=format&fit=crop',
     points: [
