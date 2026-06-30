@@ -1,248 +1,261 @@
-// Internal timestamp conversion engine to secure accurate calendar sorting calculations
-export const parseFeedDate = (dateStr) => {
-  if (!dateStr || dateStr.includes('Now') || dateStr.includes('Rated') || dateStr.includes('Favorite') || dateStr.includes('Trending') || dateStr.includes('ago')) {
-    return new Date(8640000000000000); 
-  }
-  const parts = dateStr.split(' ');
-  if (parts.length === 3) {
-    const day = parseInt(parts[0], 10);
-    const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
-    const month = months[parts[1]] || 0;
-    const year = parseInt(parts[2], 10);
-    return new Date(year, month, day);
-  }
-  return new Date(0);
-};
+import React, { useState, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import { fallbackFeedItems, categories, parseFeedDate } from './data';
+import { redis } from './redisClient';
 
-// Perfectly aligned with your frontend category filtering layout rows
-export const categories = ['All', 'Concerts', 'Sporting Events', 'Movies', 'Places to Dine', 'Other'];
+// Component to handle individual image rendering safely
+function SafeFeedImage({ src, alt }) {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [isFallback, setIsFallback] = useState(false);
 
-export const initialFeedItems = [
-  // ==========================================
-  // 1. CONCERTS
-  // ==========================================
-  {
-    id: 'c1',
-    category: 'Concerts',
-    subCategory: 'Stadium Gigs',
-    time: '04 Aug 2026',
-    flames: 142,
-    title: 'The Neighbourhood: Live at Spark Arena',
-    imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | Spark Arena.',
-      'Massive global indie-rock headliners arrive in New Zealand for their highly anticipated world tour.',
-      'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz/search?q=The+Neighbourhood'
-  },
-  {
-    id: 'c2',
-    category: 'Concerts',
-    subCategory: 'Winter Festivals',
-    time: '11 Aug 2026',
-    flames: 89,
-    title: 'Luude: Australasian Winter Tour Direct Hits',
-    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Wellington (Shed 6) & Auckland (Shed 10).',
-      'The chart-topping electronic producer brings high-energy festival-tier sets directly to major regional venues.',
-      'Strictly limited door sales available alongside general admission passes.'
-    ],
-    source: 'Live Nation NZ',
-    sourceUrl: 'https://www.livenation.co.nz/search?keyword=Luude'
-  },
-  {
-    id: 'c3',
-    category: 'Concerts',
-    subCategory: 'Synth-Pop Solo',
-    time: '18 Aug 2026',
-    flames: 215,
-    title: 'Fred again..: Surprise Arena Loop Pop-Up',
-    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Christchurch | Wolfbrook Arena.',
-      'An exclusive, highly sought-after South Island alternative layout performance announced overnight.',
-      'Strict digital-only entry verification tickets are locked exclusively via official mobile box offices.'
-    ],
-    source: 'Ticketek NZ',
-    sourceUrl: 'https://premier.ticketek.co.nz/search/SearchResults.aspx?k=Fred+again'
-  },
-  {
-    id: 'c4',
-    category: 'Concerts',
-    subCategory: 'Heavy Rock Tour',
-    time: '05 Sep 2026',
-    flames: 174,
-    title: 'Foo Fighters: Concrete and Gold Revival',
-    imageUrl: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | Go Media Stadium Mt Smart.',
-      'The iconic rock legends return to anchor an expansive open-air stadium night layout.',
-      'Premium field and structural golden-circle passes are selling fast through regional platforms.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz/search?q=Foo+Fighters'
-  },
+  const handleError = () => {
+    if (!isFallback) {
+      setImgSrc('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop');
+      setIsFallback(true);
+    }
+  };
 
-  // ==========================================
-  // 2. SPORTING EVENTS
-  // ==========================================
-  {
-    id: 's1',
-    category: 'Sporting Events',
-    subCategory: 'International Football',
-    time: '26 Aug 2026',
-    flames: 96,
-    title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | Eden Park.',
-      'English Premier League giants travel to local shores to take on Auckland FC in a massive stadium spectacle.',
-      'Part of the International Football Festival; expect an absolute packed house.'
-    ],
-    source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz/whats-on/'
-  },
-  {
-    id: 's2',
-    category: 'Sporting Events',
-    subCategory: 'Rugby Union Championship',
-    time: '12 Sep 2026',
-    flames: 312,
-    title: 'All Blacks vs Australia: Bledisloe Cup Decider',
-    imageUrl: 'https://images.unsplash.com/photo-1544547611-c54d9626a515?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Wellington | Sky Stadium.',
-      'The definitive annual trans-Tasman test event series match lands in the capital.',
-      'Corporate hospitality suites and public grandstand ticket tiers are open via main channels.'
-    ],
-    source: 'Sky Stadium Box Office',
-    sourceUrl: 'https://www.skystadium.co.nz/whats-on/'
-  },
-  {
-    id: 's3',
-    category: 'Sporting Events',
-    subCategory: 'Football - UEFA',
-    time: '45m ago',
-    flames: 184,
-    title: 'Champions League: Tactical Masterclass Books Spot in European Grand Final',
-    imageUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'A late second-half counter-attacking structure breaks down a stubborn defensive backline configuration.',
-      'Club executives confirm historic broadcast viewership figures across global streaming networks.',
-      'The grand final venue initiates premium stadium preparations ahead of next month\'s fixture.'
-    ],
-    source: 'BBC Sport',
-    sourceUrl: 'https://www.bbc.com/sport'
-  },
+  return (
+    <div className="my-3.5 overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-900 relative min-h-[180px] flex items-center justify-center">
+      <img 
+        src={imgSrc} 
+        alt={alt} 
+        onError={handleError}
+        className="w-full h-48 sm:h-56 object-cover opacity-90 hover:opacity-100 transition-opacity duration-200"
+        loading="lazy"
+      />
+    </div>
+  );
+}
 
-  // ==========================================
-  // 3. MOVIES
-  // ==========================================
-  {
-    id: 'm1',
-    category: 'Movies',
-    subCategory: 'Cinema Blockbusters',
-    time: '09 Aug 2026',
-    flames: 54,
-    title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
-    imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Hoyts & Event Cinemas (Auckland, Wellington, Christchurch).',
-      'The highly anticipated silver-screen seasonal headliner lands across all major commercial theater circuits.',
-      'Advance family and premium lounge ticket booking tiers open this week.'
-    ],
-    source: 'Event Cinemas',
-    sourceUrl: 'https://www.eventcinemas.co.nz/'
-  },
-  {
-    id: 'm2',
-    category: 'Movies',
-    subCategory: 'Film Festivals',
-    time: '20 Aug 2026',
-    flames: 120,
-    title: 'New Zealand International Film Festival: Opening Night Gala',
-    imageUrl: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Christchurch | Isaac Theatre Royal.',
-      'The premier presentation of award-winning global arthouse and underground features.',
-      'Opening gala package passes and single-film validation vouchers are managed directly via Ticketek.'
-    ],
-    source: 'NZIFF Portal',
-    sourceUrl: 'https://www.nziff.co.nz/'
-  },
+export function App() {
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [feedItems, setFeedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // ==========================================
-  // 4. PLACES TO DINE
-  // ==========================================
-  {
-    id: 'd1',
-    category: 'Places to Dine',
-    subCategory: 'Auckland Hotspots',
-    time: 'Trending Now',
-    flames: 198,
-    title: 'Origine: Modern French Bistro Elegance in Commercial Bay',
-    imageUrl: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland CBD | Commercial Bay.',
-      'A stunning Parisian-style glasshouse dining room serving classic French techniques with premium New Zealand seafood and meats.',
-      'Highly recommended: The fresh structural seafood platters and their tailored gin cocktail pairings.'
-    ],
-    source: 'Origine Auckland',
-    sourceUrl: 'https://www.origine.nz/'
-  },
-  {
-    id: 'd2',
-    category: 'Places to Dine',
-    subCategory: 'Christchurch Eateries',
-    time: 'Highly Rated',
-    flames: 165,
-    title: 'Inati: Elegant Neo-Classic Chef\'s Table Experience',
-    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Christchurch | Hereford Street.',
-      'Sit directly at the theater-style brass counter to watch chefs construct award-winning, innovative South Island plates.',
-      'Securing reservations 2-3 weeks in advance is highly recommended for weekend dinner sittings.'
-    ],
-    source: 'Inati Christchurch',
-    sourceUrl: 'https://inati.nz/'
-  },
-  {
-    id: 'd3',
-    category: 'Places to Dine',
-    subCategory: 'Wellington Bistro',
-    time: 'Local Favorite',
-    flames: 112,
-    title: 'Loretta: Artisanal Seasonal Inner-City Dining',
-    imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Wellington | Cuba Street.',
-      'An airy, rustic-industrial space focused on wood-fired specialty grains, charcuterie, and rotating organic vegetable highlights.',
-      'Perfect choice for casual brunch clusters or ambient low-lit evening group dinner arrangements.'
-    ],
-    source: 'Loretta Cuba St',
-    sourceUrl: 'https://www.loretta.net.nz/'
-  },
+  // 📡 Dynamic Live Event Fetcher & Flame Stitching Engine
+  useEffect(() => {
+    async function fetchLiveEvents() {
+      try {
+        setLoading(true);
+        
+        // Simulating background stream injection from your fallback matrix
+        // (In the future, swap fallbackFeedItems for a fetch('your-api/events') call)
+        const dynamicData = [...fallbackFeedItems]; 
 
-  // ==========================================
-  // 5. OTHER
-  // ==========================================
-  {
-    id: 'o1',
-    category: 'Other',
-    subCategory: 'Live Theatre & Musicals',
-    time: '22 Oct 2026',
-    flames: 287,
-    title: 'Wicked The Musical: Star-Studded Civic Run',
-    imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | The Civic Theatre.',
-      'The legendary Broadway production lands in Auckland for a strictly limited four-week regional season.',
-      'Corporate hospitality suites and weekend matinee allocations opening to the public early.'
-    ],
-    source: 'Auckland Live Box Office',
-    sourceUrl: 'https://www.aucklandlive.co.nz/'
-  }
-];
+        // Query your live Upstash Redis database hashmap to pull actual aggregated flame scores
+        const liveFlamesMap = await redis.hgetall('wots_hot_live_scores');
+
+        const updatedItems = dynamicData.map(item => {
+          let databaseFlames = item.flames;
+          if (liveFlamesMap && liveFlamesMap[item.id] !== undefined) {
+            databaseFlames = parseInt(liveFlamesMap[item.id], 10);
+          }
+          return {
+            ...item,
+            flames: databaseFlames
+          };
+        });
+
+        setFeedItems(updatedItems);
+      } catch (err) {
+        console.warn("Database sync resting, using baseline layout numbers:", err);
+        setFeedItems(fallbackFeedItems);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLiveEvents();
+  }, [isRefreshing]);
+
+  // 🔥 Atomic increments write straight out live to everyone globally
+  const handleFlameUp = async (id) => {
+    // 1. Optimistic layout speed shift for immediate user feedback
+    setFeedItems(prevItems => 
+      prevItems.map(item => 
+        item.id === id ? { ...item, flames: (item.flames || 0) + 1 } : item
+      )
+    );
+
+    try {
+      // 2. Fire atomic increment directly to the shared cloud database map
+      await redis.hincrby('wots_hot_live_scores', id, 1);
+    } catch (err) {
+      console.error('Failed to dispatch live transaction:', err);
+      // Rollback local state change if the network pipeline drops
+      setFeedItems(prevItems => 
+        prevItems.map(item => 
+          item.id === id ? { ...item, flames: (item.flames || 0) - 1 } : item
+        )
+      );
+    }
+  };
+
+  const getSortedItems = () => {
+    if (activeCategory === 'Places to Dine') {
+      return feedItems.filter(item => item.category === 'Places to Dine');
+    }
+
+    if (activeCategory !== 'All') {
+      return feedItems
+        .filter(item => item.category === activeCategory)
+        .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
+    }
+
+    const timedItems = feedItems
+      .filter(item => item.category !== 'Places to Dine')
+      .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
+
+    const diningItems = feedItems.filter(item => item.category === 'Places to Dine');
+
+    return [...timedItems, ...diningItems];
+  };
+
+  const filteredItems = getSortedItems();
+
+  const handleLinkNavigation = (item) => {
+    const url = item.sourceUrl;
+    const urlObj = new URL(url);
+    if (urlObj.pathname === '/' && !urlObj.search) {
+      const isDining = item.category === 'Places to Dine';
+      const suffix = isDining ? 'restaurant menu new zealand' : 'tickets booking new zealand';
+      const fallbackQuery = encodeURIComponent(`${item.title} ${suffix}`);
+      window.open(`https://www.google.com/search?q=${fallbackQuery}`, '_blank', 'noopener,noreferrer');
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-black">
+      {/* Header */}
+      <header className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur sticky top-0 z-50 px-4 py-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🔥</span>
+            <h1 className="text-xl font-black tracking-wider text-white">
+              WOTS-<span className="text-orange-500">HOT</span>
+            </h1>
+          </div>
+          
+          <div className="flex items-center gap-2.5">
+            {/* NZ Flag */}
+            <svg className="w-8 h-5 shadow-md border border-neutral-800 rounded-sm" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="300" fill="#00247d"/>
+              <g transform="scale(0.5)">
+                <path d="M0,0 L600,300 M0,300 L600,0 M300,0 L300,300 M0,150 L600,150" stroke="#fff" strokeWidth="60"/>
+                <path d="M0,0 L600,300 M0,300 L600,0" stroke="#cc142b" strokeWidth="40"/>
+                <path d="M300,0 L300,300 M0,150 L600,150" stroke="#cc142b" strokeWidth="40"/>
+              </g>
+              <g transform="translate(450, 240) scale(0.6)">
+                <polygon points="0,-25 7,-7 25,-7 10,4 15,22 0,11 -15,22 -10,4 -25,-7 -7,-7" fill="#fff"/>
+                <polygon points="0,-18 5,-5 18,-5 7,3 11,16 0,8 -11,16 -7,3 -18,-5 -5,-5" fill="#cc142b"/>
+              </g>
+            </svg>
+
+            <button 
+              disabled={isRefreshing || loading}
+              onClick={() => {
+                setIsRefreshing(true);
+                setTimeout(() => setIsRefreshing(false), 400);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 active:scale-95 text-xs font-medium border border-neutral-700 transition-all disabled:opacity-50"
+            >
+              <span className={`inline-block ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Navigation Filters */}
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x -mx-4 px-4">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+                activeCategory === cat ? 'bg-white text-black border-white' : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:border-neutral-700'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Content Stream Display */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 space-y-3 text-neutral-400">
+            <span className="text-2xl animate-bounce">🔥</span>
+            <p className="text-sm font-medium tracking-wide">Syncing real-time global events...</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {filteredItems.map((item) => {
+              const isDining = item.category === 'Places to Dine';
+              return (
+                <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/30 backdrop-blur-sm space-y-4 shadow-xl relative">
+                  
+                  {/* 🔴 LIVE CLOUD FLAME BUTTON */}
+                  <button
+                    onClick={() => handleFlameUp(item.id)}
+                    className="absolute top-5 right-5 flex items-center gap-1 bg-orange-500/10 hover:bg-orange-500/20 active:scale-90 border border-orange-500/30 hover:border-orange-500/50 rounded-full px-2.5 py-1 text-xs font-bold text-orange-400 transition-all cursor-pointer"
+                  >
+                    <span>🔥</span>
+                    <span>{item.flames || 0}</span>
+                  </button>
+
+                  <div className="flex items-center text-[11px] font-medium text-neutral-500 pr-16">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`px-2 py-0.5 rounded border text-xs font-bold ${
+                        isDining 
+                          ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' 
+                          : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                      }`}>
+                        {item.category}
+                      </span>
+                      <span>→</span>
+                      <span className="text-neutral-400">{item.subCategory}</span>
+                    </div>
+                    <span className="mx-2 text-neutral-700">•</span>
+                    <span className="text-amber-500 font-bold">{item.time}</span>
+                  </div>
+
+                  <h2 className="text-lg font-bold text-white leading-snug tracking-tight pr-10">
+                    {item.title}
+                  </h2>
+
+                  {item.imageUrl && <SafeFeedImage src={item.imageUrl} alt={item.title} />}
+
+                  <ul className="space-y-2.5 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-600">
+                    {item.points.map((point, idx) => (
+                      <li key={idx} className="leading-relaxed pl-1">{point}</li>
+                    ))}
+                  </ul>
+
+                  <div className="pt-3 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500">
+                    <span>Source: <span className="font-semibold text-neutral-400">{item.source}</span></span>
+                    <button 
+                      onClick={() => handleLinkNavigation(item)}
+                      className="text-amber-500 hover:underline inline-flex items-center gap-0.5 font-medium bg-transparent border-none cursor-pointer p-0 text-xs tracking-wide"
+                    >
+                      {isDining ? 'View Menu ↗' : 'Book Tickets ↗'}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
+}
