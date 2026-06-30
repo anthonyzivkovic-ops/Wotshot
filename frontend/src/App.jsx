@@ -12,8 +12,7 @@ export const parseFeedDate = (dateStr) => {
     return new Date(year, month, day);
   }
   return new Date(0);
-
-  };
+};
 
 // Perfectly aligned with your frontend category filtering layout rows
 export const categories = ['All', 'Concerts', 'Sporting Events', 'Movies', 'Places to Dine', 'Other'];
@@ -29,7 +28,7 @@ export const initialFeedItems = [
     time: '04 Aug 2026',
     flames: 142,
     title: 'The Neighbourhood: Live at Spark Arena',
-    imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=cropq=80',
+    imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=crop&q=80',
     points: [
       'Location: Auckland | Spark Arena.',
       'Massive global indie-rock headliners arrive in New Zealand for their highly anticipated world tour.',
