@@ -1,6 +1,5 @@
 export const categories = ['All', 'Concerts', 'Sporting Events', 'Movies', 'Places to Dine', 'Other'];
 
-// Clean timestamp parser for layout organization
 export const parseFeedDate = (dateStr) => {
   if (!dateStr || dateStr.includes('Now') || dateStr.includes('ago')) return new Date();
   const parts = dateStr.split(' ');
@@ -12,7 +11,6 @@ export const parseFeedDate = (dateStr) => {
   return new Date();
 };
 
-// Rich editorial libraries for dynamic creation
 const concertArtists = ['Fred again..', 'Luude', 'The Neighbourhood', 'Foo Fighters', 'Six60', 'Lorde', 'Benee'];
 const sportsClashes = ['Auckland FC vs Sydney FC', 'All Blacks vs Wallabies', 'Crusaders vs Blues', 'Black Caps vs England'];
 const venues = ['Spark Arena', 'Eden Park', 'Sky Stadium', 'Wolfbrook Arena', 'Hagley Oval'];
@@ -21,7 +19,7 @@ const restaurantNames = ['Inati', 'Origine', 'Loretta', 'King of Snake', 'Amisfi
 export const generateDynamicFeeds = () => {
   const generated = [];
   
-  // 1. Generate Curated Concert Headlines
+  // 1. Concert Short Alerts
   for (let i = 0; i < 3; i++) {
     const artist = concertArtists[Math.floor(Math.random() * concertArtists.length)];
     const venue = venues[Math.floor(Math.random() * venues.length)];
@@ -29,21 +27,16 @@ export const generateDynamicFeeds = () => {
     generated.push({
       id: `sim-c-${i}-${Math.random()}`,
       category: 'Concerts',
-      subCategory: 'Trending Tour',
+      subCategory: 'Hot Concert Coming Soon',
       time: `${randomDay} Aug 2026`,
-      title: `${artist} Announces Surprise Pop-Up Show at ${venue}!`,
+      title: `${artist} Live at ${venue}`,
       imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=crop&q=80',
-      points: [
-        `Venue Spotlight: Set to take over the spectacular grounds at ${venue}.`,
-        'This highly anticipated event is currently trending across the country following an overnight announcement.',
-        'Demand is incredibly high—insiders suggest jumping in early to lock down remaining general admission spots.'
-      ],
       source: 'Ticketmaster NZ',
       sourceUrl: 'https://www.ticketmaster.co.nz'
     });
   }
 
-  // 2. Generate Curated Sports Highlights
+  // 2. Sports Short Alerts
   for (let i = 0; i < 3; i++) {
     const clash = sportsClashes[Math.floor(Math.random() * sportsClashes.length)];
     const venue = venues[Math.floor(Math.random() * venues.length)];
@@ -51,34 +44,25 @@ export const generateDynamicFeeds = () => {
     generated.push({
       id: `sim-s-${i}-${Math.random()}`,
       category: 'Sporting Events',
-      subCategory: 'Big Matchup',
+      subCategory: 'Sporting Event Coming Soon',
       time: `${randomDay} Sep 2026`,
-      title: `${clash}: Massive Matchup Headed to New Zealand`,
+      title: `${clash} Live at ${venue}`,
       imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=80',
-      points: [
-        `Staged live from the iconic layout at ${venue}.`,
-        'A historic, high-stakes rivalry match that is expected to bring electric crowd energy to the stands.',
-        'Public grandstand and premium hospitality seating configurations are already approaching capacity limits.'
-      ],
       source: 'Sky Sport NZ',
       sourceUrl: 'https://www.skysport.co.nz'
     });
   }
 
-  // 3. Generate Curated Dining Spotlights
+  // 3. Dining Short Alerts
   for (let i = 0; i < 2; i++) {
     const rest = restaurantNames[Math.floor(Math.random() * restaurantNames.length)];
     generated.push({
       id: `sim-d-${i}-${Math.random()}`,
       category: 'Places to Dine',
-      subCategory: 'Local Hotspot',
+      subCategory: 'Trending Spot Open Now',
       time: 'Trending Now',
-      title: `${rest}: The Must-Visit Dining Experience of the Season`,
+      title: `${rest} Dining Showcase`,
       imageUrl: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&auto=format&fit=crop&q=80',
-      points: [
-        'A stunning menu layout putting premium, hand-picked local New Zealand ingredients front and center.',
-        'This vibrant spot has become an absolute city favorite—perfect for weekend dinner plans or celebratory gatherings.'
-      ],
       source: 'Cuisine Magazine',
       sourceUrl: 'https://www.google.com'
     });
