@@ -1,247 +1,172 @@
-// Internal timestamp conversion engine to secure accurate calendar sorting calculations
-export const parseFeedDate = (dateStr) => {
-  if (!dateStr || dateStr.includes('Now') || dateStr.includes('Rated') || dateStr.includes('Favorite') || dateStr.includes('Trending') || dateStr.includes('ago')) {
-    return new Date(8640000000000000); 
-  }
-  const parts = dateStr.split(' ');
-  if (parts.length === 3) {
-    const day = parseInt(parts[0], 10);
-    const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
-    const month = months[parts[1]] || 0;
-    const year = parseInt(parts[2], 10);
-    return new Date(year, month, day);
-  }
-  return new Date();
-};
+import React, { useState, useEffect } from 'react';
+import { categories, fallbackFeedItems } from './data';
 
-export const categories = ['All', 'Concerts', 'Sporting Events', 'Movies', 'Places to Dine', 'Other'];
+function App() {
+  const [feedItems, setFeedItems] = useState(fallbackFeedItems);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-export const fallbackFeedItems = [
-  // ==========================================
-  // 1. CONCERTS
-  // ==========================================
-  {
-    id: 'c1',
-    category: 'Concerts',
-    subCategory: 'Stadium Gigs',
-    time: '04 Aug 2026',
-    flames: 142,
-    title: 'The Neighbourhood: Live at Spark Arena',
-    imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | Spark Arena.',
-      'Massive global indie-rock headliners arrive in New Zealand for their highly anticipated world tour.',
-      'Tickets moving fast via mainstream local booking platforms for this prime weekend event.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz'
-  },
-  {
-    id: 'c2',
-    category: 'Concerts',
-    subCategory: 'Winter Music Festivals',
-    time: '11 Aug 2026',
-    flames: 89,
-    title: 'Luude: Australasian Winter Tour Direct Hits',
-    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Wellington (Shed 6) & Auckland (Shed 10).',
-      'The chart-topping electronic producer brings high-energy festival-tier sets directly to major regional venues.',
-      'Strictly limited door sales available alongside general admission passes.'
-    ],
-    source: 'Live Nation NZ',
-    sourceUrl: 'https://www.livenation.co.nz'
-  },
-  {
-    id: 'c3',
-    category: 'Concerts',
-    subCategory: 'Synth-Pop Solo',
-    time: '18 Aug 2026',
-    flames: 215,
-    title: 'Fred again..: Surprise Arena Loop Pop-Up',
-    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Christchurch | Wolfbrook Arena.',
-      'An exclusive, highly sought-after South Island alternative layout performance announced overnight.',
-      'Strict digital-only entry verification tickets are locked exclusively via official mobile box offices.'
-    ],
-    source: 'Ticketek NZ',
-    sourceUrl: 'https://premier.ticketek.co.nz'
-  },
-  {
-    id: 'c4',
-    category: 'Concerts',
-    subCategory: 'Heavy Rock Tour',
-    time: '05 Sep 2026',
-    flames: 174,
-    title: 'Foo Fighters: Concrete and Gold Revival',
-    imageUrl: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | Go Media Stadium Mt Smart.',
-      'The iconic rock legends return to anchor an expansive open-air stadium night layout.',
-      'Premium field and structural golden-circle passes are selling fast through regional platforms.'
-    ],
-    source: 'Ticketmaster NZ',
-    sourceUrl: 'https://www.ticketmaster.co.nz'
-  },
+  // Live Sync Engine - Prepped for when your automated backend pipeline goes live
+  useEffect(() => {
+    async function syncLatestEvents() {
+      // Set to true if you are actively debugging your deployed database routing
+      const isBackendConfigured = false; 
+      
+      if (!isBackendConfigured) return;
 
-  // ==========================================
-  // 2. SPORTING EVENTS
-  // ==========================================
-  {
-    id: 's1',
-    category: 'Sporting Events',
-    subCategory: 'International Football',
-    time: '26 Aug 2026',
-    flames: 96,
-    title: 'Tottenham Hotspur vs Auckland FC Blockbuster Clash',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | Eden Park.',
-      'English Premier League giants travel to local shores to take on Auckland FC in a massive stadium spectacle.',
-      'Part of the International Football Festival; expect an absolute packed house.'
-    ],
-    source: 'Eden Park Events',
-    sourceUrl: 'https://edenpark.co.nz'
-  },
-  {
-    id: 's2',
-    category: 'Sporting Events',
-    subCategory: 'Rugby Union Championship',
-    time: '12 Sep 2026',
-    flames: 312,
-    title: 'All Blacks vs Australia: Bledisloe Cup Decider',
-    imageUrl: 'https://images.unsplash.com/photo-1544547611-c54d9626a515?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Wellington | Sky Stadium.',
-      'The definitive annual trans-Tasman test event series match lands in the capital.',
-      'Corporate hospitality suites and public grandstand ticket tiers are open via main channels.'
-    ],
-    source: 'Sky Stadium Box Office',
-    sourceUrl: 'https://www.skystadium.co.nz'
-  },
-  {
-    id: 's3',
-    category: 'Sporting Events',
-    subCategory: 'Football - UEFA',
-    time: '45m ago',
-    flames: 184,
-    title: 'Champions League: Tactical Masterclass Books Spot in European Grand Final',
-    imageUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'A late second-half counter-attacking structure breaks down a stubborn defensive backline configuration.',
-      'Club executives confirm historic broadcast viewership figures across global streaming networks.',
-      'The grand final venue initiates premium stadium preparations ahead of next month\'s fixture.'
-    ],
-    source: 'BBC Sport',
-    sourceUrl: 'https://www.bbc.com/sport'
-  },
+      try {
+        setIsLoading(true);
+        // Replace with your actual backend Render URL when server.js is deployed
+        const response = await fetch('https://your-backend-api-url.render.com/api/feeds');
+        if (!response.ok) throw new Error('Network stream sync interrupted.');
+        const freshData = await response.json();
+        if (freshData && freshData.length > 0) {
+          setFeedItems(freshData);
+        }
+      } catch (err) {
+        console.error("Database fallback active:", err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-  // ==========================================
-  // 3. MOVIES
-  // ==========================================
-  {
-    id: 'm1',
-    category: 'Movies',
-    subCategory: 'Cinema Blockbusters',
-    time: '09 Aug 2026',
-    flames: 54,
-    title: 'Disney Premieres – Nationwide Commercial Cinematic Releases',
-    imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Hoyts & Event Cinemas (Auckland, Wellington, Christchurch).',
-      'The highly anticipated silver-screen seasonal headliner lands across all major commercial theater circuits.',
-      'Advance family and premium lounge ticket booking tiers open this week.'
-    ],
-    source: 'Event Cinemas',
-    sourceUrl: 'https://www.eventcinemas.co.nz'
-  },
-  {
-    id: 'm2',
-    category: 'Movies',
-    subCategory: 'Film Festivals',
-    time: '20 Aug 2026',
-    flames: 120,
-    title: 'New Zealand International Film Festival: Opening Night Gala',
-    imageUrl: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Christchurch | Isaac Theatre Royal.',
-      'The premier presentation of award-winning global arthouse and underground features.',
-      'Opening gala package passes and single-film validation vouchers are managed directly via Ticketek.'
-    ],
-    source: 'NZIFF Portal',
-    sourceUrl: 'https://www.nziff.co.nz'
-  },
+    syncLatestEvents();
+  }, []);
 
-  // ==========================================
-  // 4. PLACES TO DINE
-  // ==========================================
-  {
-    id: 'd1',
-    category: 'Places to Dine',
-    subCategory: 'Auckland Hotspots',
-    time: 'Trending Now',
-    flames: 198,
-    title: 'Origine: Modern French Bistro Elegance in Commercial Bay',
-    imageUrl: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland CBD | Commercial Bay.',
-      'A stunning Parisian-style glasshouse dining room serving classic French techniques with premium New Zealand seafood and meats.',
-      'Highly recommended: The fresh structural seafood platters and their tailored gin cocktail pairings.'
-    ],
-    source: 'Origine Auckland',
-    sourceUrl: 'https://www.origine.nz'
-  },
-  {
-    id: 'd2',
-    category: 'Places to Dine',
-    subCategory: 'Christchurch Eateries',
-    time: 'Highly Rated',
-    flames: 165,
-    title: 'Inati: Elegant Neo-Classic Chef\'s Table Experience',
-    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Christchurch | Hereford Street.',
-      'Sit directly at the theater-style brass counter to watch chefs construct award-winning, innovative South Island plates.',
-      'Securing reservations 2-3 weeks in advance is highly recommended for weekend dinner sittings.'
-    ],
-    source: 'Inati Christchurch',
-    sourceUrl: 'https://inati.nz'
-  },
-  {
-    id: 'd3',
-    category: 'Places to Dine',
-    subCategory: 'Wellington Bistro',
-    time: 'Local Favorite',
-    flames: 112,
-    title: 'Loretta: Artisanal Seasonal Inner-City Dining',
-    imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Wellington | Cuba Street.',
-      'An airy, rustic-industrial space focused on wood-fired specialty grains, charcuterie, and rotating organic vegetable highlights.',
-      'Perfect choice for casual brunch clusters or ambient low-lit evening group dinner arrangements.'
-    ],
-    source: 'Loretta Cuba St',
-    sourceUrl: 'https://www.loretta.net.nz'
-  },
+  // Filter content instantly by category
+  const filteredItems = selectedCategory === 'All'
+    ? feedItems
+    : feedItems.filter(item => item.category === selectedCategory);
 
-  // ==========================================
-  // 5. OTHER
-  // ==========================================
-  {
-    id: 'o1',
-    category: 'Other',
-    subCategory: 'Live Theatre & Musicals',
-    time: '22 Oct 2026',
-    flames: 287,
-    title: 'Wicked The Musical: Star-Studded Civic Run',
-    imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&auto=format&fit=crop&q=80',
-    points: [
-      'Location: Auckland | The Civic Theatre.',
-      'The legendary Broadway production lands in Auckland for a strictly limited four-week regional season.',
-      'Corporate hospitality suites and weekend matinee allocations opening to the public early.'
-    ],
-    source: 'Auckland Live Box Office',
-    sourceUrl: 'https://www.aucklandlive.co.nz'
-  }
-];
+  return (
+    <div className="min-h-screen bg-gray-100 font-sans antialiased">
+      {/* Top Navigation Bar */}
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+          <h1 className="text-xl font-black tracking-tight text-red-600 flex items-center gap-1">
+            🔥 WHAT'S HOT
+          </h1>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-medium">
+            {feedItems.length} Stories Loaded
+          </span>
+        </div>
+      </header>
+
+      {/* Scannable Category Filter Bar */}
+      <div className="sticky top-14 z-40 bg-white border-b border-gray-200 shadow-xs overflow-x-auto scrollbar-none">
+        <div className="max-w-2xl mx-auto px-4 py-3 flex gap-2 whitespace-nowrap">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-150 ${
+                selectedCategory === cat
+                  ? 'bg-black text-white shadow-xs scale-102'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content Feed Area */}
+      <main className="max-w-2xl mx-auto px-4 py-6">
+        {isLoading && (
+          <div className="text-center py-12 text-gray-500 font-medium animate-pulse">
+            Syncing fresh content streams...
+          </div>
+        )}
+
+        {!isLoading && filteredItems.length === 0 && (
+          <div className="text-center py-12 bg-white rounded-xl border border-gray-200 p-6 shadow-xs">
+            <p className="text-gray-500 font-medium">No fresh updates in {selectedCategory} right now.</p>
+          </div>
+        )}
+
+        {!isLoading && (
+          <div className="space-y-6">
+            {filteredItems.map((item) => (
+              <article 
+                key={item.id} 
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-200"
+              >
+                {/* Card Top Information Header */}
+                <div className="p-4 flex items-center justify-between border-b border-gray-50">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black uppercase tracking-wider bg-red-50 text-red-600 px-2 py-0.5 rounded-md">
+                      {item.category}
+                    </span>
+                    <span className="text-xs font-medium text-gray-400">•</span>
+                    <span className="text-xs font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-md">
+                      {item.subCategory}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs font-bold text-gray-400">
+                    <span>{item.time}</span>
+                  </div>
+                </div>
+
+                {/* Main Visual Asset Section */}
+                {item.imageUrl && (
+                  <div className="relative aspect-video w-full bg-gray-100 overflow-hidden">
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover transform hover:scale-101 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-xs text-white px-2.5 py-1 rounded-lg text-xs font-black flex items-center gap-1 shadow-sm">
+                      🔥 {item.flames}
+                    </div>
+                  </div>
+                )}
+
+                {/* Core Text Content Block */}
+                <div className="p-4 space-y-3">
+                  <h2 className="text-lg font-extrabold text-gray-900 leading-snug hover:text-red-600 transition-colors duration-150">
+                    {item.title}
+                  </h2>
+                  
+                  {/* Clean bullet points layout */}
+                  <ul className="space-y-2">
+                    {item.points && item.points.map((pt, idx) => (
+                      <li key={idx} className="text-sm text-gray-600 leading-relaxed flex items-start gap-2">
+                        <span className="text-red-500 mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Bottom Source Validation Bar */}
+                {item.source && (
+                  <div className="px-4 py-3 bg-gray-50/70 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                      Source: {item.source}
+                    </span>
+                    {item.sourceUrl && (
+                      <a 
+                        href={item.sourceUrl} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="text-xs font-bold text-red-600 hover:text-red-700 hover:underline transition-colors"
+                      >
+                        Verify Live Ticket Info →
+                      </a>
+                    )}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export default App;
