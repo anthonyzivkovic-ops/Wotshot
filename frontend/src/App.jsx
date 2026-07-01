@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { categories, generateDynamicFeeds, parseFeedDate } from './data';
 
+// Clean embedded styling layout
 const embeddedStyles = `
   .wots-bg { background-color: #0a0a0a; color: #f5f5f5; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; }
   .wots-header { border-bottom: 1px solid #262626; background-color: rgba(23, 23, 23, 0.8); position: sticky; top: 0; z-index: 50; padding: 1rem; backdrop-filter: blur(8px); }
@@ -54,7 +55,7 @@ export function App() {
       <style>{embeddedStyles}</style>
 
       <header className="wots-header">
-        <div style={{ maxWidth: '42rem', margin: '0 auto', display: 'flex', alignItems: 'center', justifycontent: 'space-between', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '42rem', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h1 className="wots-title">
             WOTS-<span className="wots-orange">HOT</span>
           </h1>
