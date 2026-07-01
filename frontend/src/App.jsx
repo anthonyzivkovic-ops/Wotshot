@@ -1,41 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { categories, generateDynamicFeeds, parseFeedDate } from './data';
 
-function App() {
+export function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Hooking up the client simulation stream loop
   const triggerFreshDataLoad = () => {
     setIsLoading(true);
     setTimeout(() => {
       const simulatedData = generateDynamicFeeds();
       setFeedItems(simulatedData);
       setIsLoading(false);
-    }, 400); // Tiny pause to mimic real network delay
+    }, 400);
   };
 
-  // Generate a totally unique set of cards right when the site loads
   useEffect(() => {
     triggerFreshDataLoad();
   }, []);
 
-  // Sort and filter setup
   const filteredItems = feedItems
     .filter(item => selectedCategory === 'All' || item.category === selectedCategory)
     .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased">
-      {/* Dynamic Navigation Header */}
       <header className="border-b border-neutral-800 bg-neutral-900/80 sticky top-0 z-50 px-4 py-4 backdrop-blur-md">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <h1 className="text-xl font-black tracking-wider text-white">
             WOTS-<span className="text-orange-500">HOT</span>
           </h1>
-          
-          {/* Active Refresh Action Button */}
           <button 
             onClick={triggerFreshDataLoad}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-bold border border-neutral-700 transition-all active:scale-95 cursor-pointer"
@@ -45,9 +39,7 @@ function App() {
         </div>
       </header>
 
-      {/* Main Layout Workspace */}
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Scrollable Filters */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
           {categories.map((cat) => (
             <button
@@ -62,7 +54,6 @@ function App() {
           ))}
         </div>
 
-        {/* Dynamic State Component Render */}
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 text-neutral-400 space-y-2">
             <span className="text-xl animate-spin">🔄</span>
@@ -72,7 +63,6 @@ function App() {
           <div className="space-y-4">
             {filteredItems.map((item) => (
               <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/40 space-y-4 relative shadow-2xl">
-                
                 <div className="flex items-center text-[11px] font-bold text-neutral-500 gap-2">
                   <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 uppercase text-[10px]">
                     {item.category}
