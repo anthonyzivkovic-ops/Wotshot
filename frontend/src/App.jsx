@@ -1,6 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { categories, generateDynamicFeeds, parseFeedDate } from './data';
 
+const embeddedStyles = `
+  .wots-bg { background-color: #0a0a0a; color: #f5f5f5; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; }
+  .wots-header { border-bottom: 1px solid #262626; background-color: rgba(23, 23, 23, 0.8); position: sticky; top: 0; z-index: 50; padding: 1rem; backdrop-filter: blur(8px); }
+  .wots-container { max-width: 42rem; margin: 0 auto; padding: 1.5rem 1rem; }
+  .wots-title { font-size: 1.25rem; font-weight: 900; color: #ffffff; margin: 0; }
+  .wots-orange { color: #f97316; }
+  .wots-btn-refresh { display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; background-color: #262626; border: 1px solid #404040; color: #f5f5f5; font-size: 0.75rem; font-weight: 700; cursor: pointer; border-radius: 6px; }
+  .wots-btn-refresh:hover { background-color: #404040; }
+  .wots-filter-row { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  .wots-filter-row::-webkit-scrollbar { display: none; }
+  .wots-filter-btn { padding: 0.375rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; border: 1px solid #262626; cursor: pointer; white-space: nowrap; }
+  .wots-btn-active { background-color: #ffffff; color: #000000; border-color: #ffffff; }
+  .wots-btn-inactive { background-color: #171717; color: #a3a3a3; }
+  .wots-btn-inactive:hover { border-color: #404040; }
+  .wots-card { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #262626; background-color: rgba(23, 23, 23, 0.4); margin-bottom: 1rem; position: relative; }
+  .wots-meta { display: flex; align-items: center; gap: 0.5rem; font-size: 11px; font-weight: 700; color: #737373; margin-bottom: 0.75rem; }
+  .wots-badge { padding: 0.125rem 0.5rem; border-radius: 4px; background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); text-transform: uppercase; font-size: 10px; }
+  .wots-card-title { font-size: 1.25rem; font-weight: 800; color: #ffffff; line-height: 1.4; margin: 0 0 1rem 0; }
+  .wots-img-box { overflow: hidden; border-radius: 0.5rem; background-color: #171717; width: 100%; aspect-ratio: 16/9; margin-bottom: 1rem; }
+  .wots-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+  .wots-footer-line { padding-top: 0.75rem; border-top: 1px solid #262626; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: #737373; }
+  .wots-link { color: #f59e0b; font-weight: 700; text-decoration: none; }
+  .wots-link:hover { text-decoration: underline; }
+  .wots-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem 0; color: #a3a3a3; gap: 0.5rem; font-size: 0.875rem; }
+`;
+
 export function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -12,7 +38,7 @@ export function App() {
       const simulatedData = generateDynamicFeeds();
       setFeedItems(simulatedData);
       setIsLoading(false);
-    }, 400);
+    }, 300);
   };
 
   useEffect(() => {
@@ -24,30 +50,27 @@ export function App() {
     .sort((a, b) => parseFeedDate(a.time) - parseFeedDate(b.time));
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased">
-      <header className="border-b border-neutral-800 bg-neutral-900/80 sticky top-0 z-50 px-4 py-4 backdrop-blur-md">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-black tracking-wider text-white">
-            WOTS-<span className="text-orange-500">HOT</span>
+    <div className="wots-bg">
+      <style>{embeddedStyles}</style>
+
+      <header className="wots-header">
+        <div style={{ maxWidth: '42rem', margin: '0 auto', display: 'flex', alignItems: 'center', justifycontent: 'space-between', justifyContent: 'space-between' }}>
+          <h1 className="wots-title">
+            WOTS-<span className="wots-orange">HOT</span>
           </h1>
-          <button 
-            onClick={triggerFreshDataLoad}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-bold border border-neutral-700 transition-all active:scale-95 cursor-pointer"
-          >
+          <button onClick={triggerFreshDataLoad} className="wots-btn-refresh">
             🔄 Simulate Live Scrape
           </button>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+      <main className="wots-container">
+        <div className="wots-filter-row">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
-                selectedCategory === cat ? 'bg-white text-black border-white' : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:border-neutral-700'
-              }`}
+              className={`wots-filter-btn ${selectedCategory === cat ? 'wots-btn-active' : 'wots-btn-inactive'}`}
             >
               {cat}
             </button>
@@ -55,41 +78,33 @@ export function App() {
         </div>
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-neutral-400 space-y-2">
-            <span className="text-xl animate-spin">🔄</span>
-            <p className="text-sm font-medium">Scraping regional event tickets streams...</p>
+          <div className="wots-loading">
+            <span>🔄</span>
+            <p>Refreshing notice streams...</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {filteredItems.map((item) => (
-              <article key={item.id} className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/40 space-y-4 relative shadow-2xl">
-                <div className="flex items-center text-[11px] font-bold text-neutral-500 gap-2">
-                  <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 uppercase text-[10px]">
-                    {item.category}
-                  </span>
+              <article key={item.id} className="wots-card">
+                <div className="wots-meta">
+                  <span className="wots-badge">{item.category}</span>
                   <span>•</span>
-                  <span className="text-neutral-400">{item.subCategory}</span>
+                  <span style={{ color: '#e5e5e5' }}>{item.subCategory}</span>
                   <span>•</span>
-                  <span className="text-orange-400">{item.time}</span>
+                  <span style={{ color: '#f97316' }}>{item.time}</span>
                 </div>
 
-                <h2 className="text-lg font-extrabold text-white leading-snug">
-                  {item.title}
-                </h2>
+                <h2 className="wots-card-title">{item.title}</h2>
 
-                <div className="overflow-hidden rounded-lg bg-neutral-900 aspect-video w-full">
-                  <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover opacity-90" />
-                </div>
+                {item.imageUrl && (
+                  <div className="wots-img-box">
+                    <img src={item.imageUrl} alt={item.title} className="wots-img" />
+                  </div>
+                )}
 
-                <ul className="space-y-2 text-sm text-neutral-300 list-disc pl-4 marker:text-neutral-700">
-                  {item.points.map((pt, idx) => (
-                    <li key={idx} className="leading-relaxed">{pt}</li>
-                  ))}
-                </ul>
-
-                <div className="pt-3 border-t border-neutral-800 flex items-center justify-between text-xs text-neutral-500">
-                  <span>Source: <span className="font-semibold text-neutral-400">{item.source}</span></span>
-                  <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="text-amber-500 font-bold hover:underline">
+                <div className="wots-footer-line">
+                  <span>Source: <span style={{ color: '#e5e5e5', fontWeight: 600 }}>{item.source}</span></span>
+                  <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="wots-link">
                     Book Tickets ↗
                   </a>
                 </div>
@@ -103,10 +118,3 @@ export function App() {
 }
 
 export default App;
-
-import { createRoot } from 'react-dom/client';
-const container = document.getElementById('root');
-if (container) {
-  const root = createRoot(container);
-  root.render(<App />);
-}
